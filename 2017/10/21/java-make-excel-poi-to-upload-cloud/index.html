@@ -1,0 +1,444 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-Hans" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Java导出Excel文档（poi），并上传到腾讯云对象存储服务器 - Luis Blog</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content="java,spring,springboot,springcloud,mybatis,jQuery,html,css, java,poi">
+  <meta name="description" content="
+需求后台生成周报月报季报年报Excel，将文件下载链...">
+  <meta name="author" content="winter chen">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xt256.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: '',
+        wechat: ''
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://gitee.com/winter_chen/img/raw/master/blog/20210413131918.jpeg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: true,
+        path: '/search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+        <i class="iconfont iconsearch j-navbar-search"></i>
+      
+    </div>
+    <div class="center">Java导出Excel文档（poi），并上传到腾讯云对象存储服务器</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="https://www.winterchen.com " target="_blank" rel="noopener" class="underline "> 主页</a>
+      </li><li class="menu-item">
+        <a href="/ " class="underline "> 博客首页</a>
+      </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 摄影</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046771647511.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">Java导出Excel文档（poi），并上传到腾讯云对象存储服务器</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 21, 2017</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>19197</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+          <p><p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046771909687.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p><strong>后台生成周报月报季报年报Excel，将文件下载链接推送给对应客户</strong></p></p>
+        
+        <h3 id="开发思路："><a href="#开发思路：" class="headerlink" title="开发思路："></a>开发思路：</h3><p><strong>1.根据选定日期生成周报，月报，季报，年报数据</strong><br><strong>2.将这些数据报告生成Excel表格</strong><br><strong>3.把生成的文件上传到腾讯云对象存储服务器</strong><br><strong>4.将服务器返回的url存储到数据库</strong></p>
+<h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><p><strong><a href="http://download.csdn.net/download/yaosir12/9475344" target="_blank" rel="noopener">poi-3.14-20160307.jar(点击可下载)</a></strong></p>
+<h3 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h3><p>获取数据部分省略了</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p><strong>主方法</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">addReportExcelToCloud</span><span class="hljs-params">(ReportResult rr)</span> </span>&#123;<br><br>		OutputStream out = <span class="hljs-keyword">new</span> ByteArrayOutputStream();<br>		ExcelProjectUtils eu = <span class="hljs-keyword">new</span> ExcelProjectUtils();<br>		eu.exportExcel(rr, out);   <span class="hljs-comment">//&lt;1&gt;</span><br>		ConvertUtil cu = <span class="hljs-keyword">new</span> ConvertUtil();<br>		<span class="hljs-keyword">try</span> &#123;<br>			ByteArrayInputStream byteInput = cu.parse(out);<br>			String rs = PicUploadToYun.uploadExcel(SysContent.getFileRename(<span class="hljs-string">"案场数据报.xls"</span>), byteInput);  <span class="hljs-comment">//&lt;2&gt;</span><br>			addReportExcelToDB(rr, rs);  <span class="hljs-comment">//&lt;3&gt;</span><br>			<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125;<br><br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>	&#125;<br></code></pre></td></tr></table></figure>
+<p>&lt;1&gt; 将数据生成二进制Excel文件 (方法详细见下面代码)<br>&lt;2&gt; 将生成的二进制文件上传到腾讯云对象存储服务器 (方法详细见下面代码)<br>&lt;3&gt; 将服务器返回的url存储到数据库 (方法详细见下面代码)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 周报年报生成excel</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> report</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> out</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">exportExcel</span><span class="hljs-params">(ReportResult report, OutputStream out)</span> </span>&#123;<br><br>		<span class="hljs-comment">// 判断传入的时间间隔</span><br>		String dateStr = <span class="hljs-string">""</span>;<br>		String reportName = <span class="hljs-string">""</span>;<br>		List&lt;String&gt; dateCount = DateUtil.getTwoDateEveryDay(report.getStartTime(), report.getEndTime());<br>		<span class="hljs-keyword">if</span> (dateCount.size() &lt;= <span class="hljs-number">7</span>) &#123;<br>			dateStr += <span class="hljs-string">"本周"</span>;<br>			reportName += <span class="hljs-string">"案场周报"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (dateCount.size() &gt;= <span class="hljs-number">28</span> &amp;&amp; dateCount.size() &lt;= <span class="hljs-number">31</span>) &#123;<br>			dateStr += <span class="hljs-string">"本月"</span>;<br>			reportName += <span class="hljs-string">"案场月报"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (dateCount.size() &gt;= <span class="hljs-number">85</span> &amp;&amp; dateCount.size() &lt;= <span class="hljs-number">100</span>) &#123;<br>			dateStr += <span class="hljs-string">"本季度"</span>;<br>			reportName += <span class="hljs-string">"案场季报"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (dateCount.size() &gt;= <span class="hljs-number">180</span> &amp;&amp; dateCount.size() &lt;= <span class="hljs-number">185</span>) &#123;<br>			dateStr += <span class="hljs-string">"本半年度"</span>;<br>			reportName += <span class="hljs-string">"案场半年报"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (dateCount.size() &gt;= <span class="hljs-number">360</span> &amp;&amp; dateCount.size() &lt;= <span class="hljs-number">367</span>) &#123;<br>			dateStr += <span class="hljs-string">"本年度"</span>;<br>			reportName += <span class="hljs-string">"案场年报"</span>;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			dateStr += <span class="hljs-string">"时间段内"</span>;<br>			reportName += <span class="hljs-string">"案场阶段报"</span>;<br>		&#125;<br>		report.setReportName(reportName);<br>		<span class="hljs-comment">// 声明一个工作薄</span><br>		HSSFWorkbook workbook = <span class="hljs-keyword">new</span> HSSFWorkbook();<br>		<span class="hljs-comment">// 生成一个表格</span><br>		HSSFSheet sheet = workbook.createSheet(report.getReportName() + report.getStartTime() + <span class="hljs-string">" - "</span> + report.getEndTime());<br>		<span class="hljs-comment">// 设置表格默认列宽度为100个字节</span><br>		sheet.setDefaultColumnWidth((<span class="hljs-keyword">short</span>) <span class="hljs-number">100</span>);<br>		<span class="hljs-comment">/** ----------样式一：标题 ------------ **/</span><br>		HSSFCellStyle style = workbook.createCellStyle();<br>		<span class="hljs-comment">// 设置这些样式</span><br>		style.setBorderLeft(HSSFCellStyle.BORDER_THIN);<br>		style.setBorderRight(HSSFCellStyle.BORDER_THIN);<br>		<span class="hljs-comment">//style.setBorderTop(HSSFCellStyle.BORDER_THIN);</span><br>		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);<br>		<span class="hljs-comment">// 生成一个字体</span><br>		HSSFFont font = workbook.createFont();<br>		font.setFontName(<span class="hljs-string">"宋体"</span>);<br>		<span class="hljs-comment">//font.setColor(HSSFColor.VIOLET.index);</span><br>		font.setFontHeightInPoints((<span class="hljs-keyword">short</span>) <span class="hljs-number">14</span>);<br>		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);<br>		<span class="hljs-comment">// 把字体应用到当前的样式</span><br>		style.setFont(font);<br>		<span class="hljs-comment">/***---------样式二：小标题---------***/</span><br>		HSSFCellStyle style2 = workbook.createCellStyle();<br>		style2.setBorderLeft(HSSFCellStyle.BORDER_THIN);<br>		style2.setBorderRight(HSSFCellStyle.BORDER_THIN);<br>		<span class="hljs-comment">//style2.setBorderTop(HSSFCellStyle.BORDER_THIN);</span><br>		style2.setAlignment(HSSFCellStyle.ALIGN_LEFT);<br>		<br>		<span class="hljs-comment">//style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);</span><br>		<span class="hljs-comment">// 生成另一个字体</span><br>		HSSFFont font2 = workbook.createFont();<br>		<span class="hljs-comment">//font2.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);</span><br>		font2.setFontName(<span class="hljs-string">"宋体"</span>);<br>		font2.setFontHeightInPoints((<span class="hljs-keyword">short</span>) <span class="hljs-number">11</span>);<br>		font2.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);<br>		<span class="hljs-comment">// 把字体应用到当前的样式</span><br>		style2.setFont(font2);<br>		<br>		<span class="hljs-comment">/***    样式三：右侧日期       ***/</span><br>		HSSFCellStyle style3 = workbook.createCellStyle();<br>		<span class="hljs-comment">//样式</span><br>		style3.setBorderLeft(HSSFCellStyle.BORDER_THIN);<br>		style3.setBorderRight(HSSFCellStyle.BORDER_THIN);<br>		style3.setAlignment(HSSFCellStyle.ALIGN_RIGHT);<br>		style3.setBorderBottom(HSSFCellStyle.BORDER_THIN);<br>		<span class="hljs-comment">//字体</span><br>		HSSFFont font3 = workbook.createFont();<br>		font3.setFontName(<span class="hljs-string">"宋体"</span>);<br>		font3.setFontHeightInPoints((<span class="hljs-keyword">short</span>) <span class="hljs-number">11</span>);<br>		style3.setFont(font3);<br>		<br>		<span class="hljs-comment">/**       样式四：主内容        ***/</span><br>		HSSFCellStyle style4 = workbook.createCellStyle();<br>		<span class="hljs-comment">//样式</span><br>		style4.setBorderLeft(HSSFCellStyle.BORDER_THIN);<br>		style4.setBorderRight(HSSFCellStyle.BORDER_THIN);<br>		style4.setAlignment(HSSFCellStyle.ALIGN_LEFT);<br>		<span class="hljs-comment">//字体</span><br>		HSSFFont font4 = workbook.createFont();<br>		font4.setFontName(<span class="hljs-string">"宋体"</span>);<br>		font4.setFontHeightInPoints((<span class="hljs-keyword">short</span>) <span class="hljs-number">11</span>);<br>		style4.setFont(font4);<br>		<br>		<span class="hljs-comment">/**       样式五：底侧空内容       ***/</span><br>		HSSFCellStyle style5 = workbook.createCellStyle();<br>		<span class="hljs-comment">//样式</span><br>		style5.setBorderLeft(HSSFCellStyle.BORDER_THIN);<br>		style5.setBorderRight(HSSFCellStyle.BORDER_THIN);<br>		style5.setAlignment(HSSFCellStyle.ALIGN_LEFT);<br>		style5.setBorderBottom(HSSFCellStyle.BORDER_THIN);<br>		<span class="hljs-comment">//字体</span><br>		HSSFFont font5 = workbook.createFont();<br>		font5.setFontName(<span class="hljs-string">"宋体"</span>);<br>		font5.setFontHeightInPoints((<span class="hljs-keyword">short</span>) <span class="hljs-number">11</span>);<br>		style5.setFont(font5);<br>		<br>		<br>		<span class="hljs-comment">// 声明一个画图的顶级管理器</span><br>		HSSFPatriarch patriarch = sheet.createDrawingPatriarch();<br>		<span class="hljs-comment">// 定义注释的大小和位置,详见文档</span><br>		HSSFComment comment = patriarch.createComment(<span class="hljs-keyword">new</span> HSSFClientAnchor(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, (<span class="hljs-keyword">short</span>) <span class="hljs-number">4</span>, <span class="hljs-number">2</span>, (<span class="hljs-keyword">short</span>) <span class="hljs-number">6</span>, <span class="hljs-number">5</span>));<br>		<span class="hljs-comment">// 设置注释内容</span><br>		comment.setString(<span class="hljs-keyword">new</span> HSSFRichTextString(<span class="hljs-string">"数据报"</span>));<br>		<span class="hljs-comment">// 设置注释作者，当鼠标移动到单元格上是可以在状态栏中看到该内容.</span><br>		comment.setAuthor(<span class="hljs-string">"saas"</span>);<br><br>		<span class="hljs-comment">// 产生表格标题行 -- 项目名称</span><br>		HSSFRow row = sheet.createRow(<span class="hljs-number">0</span>);<br>		createCellAndRow(style4, report.getProjectName(), row);<br><br>		<span class="hljs-comment">// 产生表格标题行 -- 周报名称</span><br>		row = sheet.createRow(<span class="hljs-number">1</span>);<br>		createCellAndRow(style, report.getReportName(), row);<br><br>		<span class="hljs-comment">// 产生表格标题行 -- 起始时间-终止时间</span><br>		row = sheet.createRow(<span class="hljs-number">2</span>);<br>		String startTime = DateUtil.format(DateUtil.parse(report.getStartTime(), DateUtil.PATTERN_CLASSICAL_SIMPLE),<br>				DateUtil.PATTERN_CLASSICAL_SIMPLE_YMD);<br>		String endTime = DateUtil.format(DateUtil.parse(report.getEndTime(), DateUtil.PATTERN_CLASSICAL_SIMPLE),<br>				DateUtil.PATTERN_CLASSICAL_SIMPLE_YMD);<br>		String date = <span class="hljs-string">"日期："</span> + startTime + <span class="hljs-string">" - "</span> + endTime;<br>		createCellAndRow(style3, date, row);<br><br>		<span class="hljs-comment">// 接访情况标题</span><br>		row = sheet.createRow(<span class="hljs-number">3</span>);<br>		createCellAndRow(style2, <span class="hljs-string">"·接访情况"</span>, row);<br><br>		<span class="hljs-comment">// 接访客户组数</span><br>		row = sheet.createRow(<span class="hljs-number">4</span>);<br>		Integer visitCount = report.getVisitCount();<br>		String visitNum = <span class="hljs-string">"1、"</span> + dateStr + <span class="hljs-string">"共计接访客户"</span> + visitCount + <span class="hljs-string">"组，来访量"</span>;<br>		<span class="hljs-keyword">if</span> (visitCount &lt; <span class="hljs-number">40</span>) &#123;<br>			visitNum += <span class="hljs-string">"较少，有待提升"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (visitCount &gt;= <span class="hljs-number">41</span> &amp;&amp; visitCount &lt;= <span class="hljs-number">99</span>) &#123;<br>			visitNum += <span class="hljs-string">"尚可，还有提高空间"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (visitCount &gt;= <span class="hljs-number">100</span> &amp;&amp; visitCount &lt;= <span class="hljs-number">139</span>) &#123;<br>			visitNum += <span class="hljs-string">"很多"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (visitCount &gt; <span class="hljs-number">140</span>) &#123;<br>			visitNum += <span class="hljs-string">"火爆"</span>;<br>		&#125;<br>		createCellAndRow(style4, visitNum, row);<br><br>		<span class="hljs-comment">// 有效接访率</span><br>		row = sheet.createRow(<span class="hljs-number">5</span>);<br>		Double visitRate = <span class="hljs-keyword">new</span> Double(report.getValidVisitRate());<br>		String visitRateStr = <span class="hljs-string">"2、有效接访率为"</span> + visitRate + <span class="hljs-string">"%，接访成效"</span>;<br>		<span class="hljs-keyword">if</span> (visitRate &lt; <span class="hljs-number">50</span>) &#123;<br>			visitRateStr += <span class="hljs-string">"较低，有待提升"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (visitRate &gt;= <span class="hljs-number">50</span> &amp;&amp; visitRate &lt;= <span class="hljs-number">65</span>) &#123;<br>			visitRateStr += <span class="hljs-string">"尚可，还有提高空间"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (visitRate &gt;= <span class="hljs-number">65</span> &amp;&amp; visitRate &lt;= <span class="hljs-number">80</span>) &#123;<br>			visitRateStr += <span class="hljs-string">"很高"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (visitRate &gt; <span class="hljs-number">80</span>) &#123;<br>			visitRateStr += <span class="hljs-string">"极高"</span>;<br>		&#125;<br>		createCellAndRow(style4, visitRateStr, row);<br><br>		<span class="hljs-comment">// 首访有效率</span><br>		row = sheet.createRow(<span class="hljs-number">6</span>);<br>		Double newVisitRate = <span class="hljs-keyword">new</span> Double(report.getValidNewCuVisitRate());<br>		String newVisitStr = <span class="hljs-string">"3、首访有效率为"</span> + newVisitRate + <span class="hljs-string">"%，来访转储客的概率"</span>;<br>		<span class="hljs-keyword">if</span> (newVisitRate &lt; <span class="hljs-number">40</span>) &#123;<br>			newVisitStr += <span class="hljs-string">"较差，有待提升"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (newVisitRate &gt;= <span class="hljs-number">40</span> &amp;&amp; newVisitRate &lt;= <span class="hljs-number">60</span>) &#123;<br>			newVisitStr += <span class="hljs-string">"尚可，还有提高空间"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (newVisitRate &gt;= <span class="hljs-number">60</span> &amp;&amp; newVisitRate &lt;= <span class="hljs-number">75</span>) &#123;<br>			newVisitStr += <span class="hljs-string">"很高"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (newVisitRate &gt; <span class="hljs-number">75</span>) &#123;<br>			newVisitStr += <span class="hljs-string">"极高"</span>;<br>		&#125;<br>		createCellAndRow(style4, newVisitStr, row);<br><br>		<span class="hljs-comment">// 老客户接访占比</span><br>		row = sheet.createRow(<span class="hljs-number">7</span>);<br>		Double oldVisitRate = <span class="hljs-keyword">new</span> Double(report.getOldCuVisitRate());<br>		String oldVisitStr = <span class="hljs-string">"4、老客户接访比为"</span> + oldVisitRate + <span class="hljs-string">"%，老客户接访的占比"</span>;<br>		<span class="hljs-keyword">if</span> (oldVisitRate &lt; <span class="hljs-number">20</span>) &#123;<br>			oldVisitStr += <span class="hljs-string">"较低"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (oldVisitRate &gt;= <span class="hljs-number">20</span> &amp;&amp; oldVisitRate &lt;= <span class="hljs-number">40</span>) &#123;<br>			oldVisitStr += <span class="hljs-string">"尚可"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (oldVisitRate &gt;= <span class="hljs-number">40</span> &amp;&amp; oldVisitRate &lt;= <span class="hljs-number">60</span>) &#123;<br>			oldVisitStr += <span class="hljs-string">"很高"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (oldVisitRate &gt; <span class="hljs-number">60</span>) &#123;<br>			oldVisitStr += <span class="hljs-string">"极高"</span>;<br>		&#125;<br>		createCellAndRow(style4, oldVisitStr, row);<br><br>		<span class="hljs-comment">//空行</span><br>		row = sheet.createRow(<span class="hljs-number">8</span>);<br>		createCellAndRow(style4, <span class="hljs-string">""</span>, row);<br>		<br>		<span class="hljs-comment">// 储客情况</span><br>		row = sheet.createRow(<span class="hljs-number">9</span>);<br>		createCellAndRow(style2, <span class="hljs-string">"·储客情况"</span>, row);<br><br>		<span class="hljs-comment">// 新增储客</span><br>		row = sheet.createRow(<span class="hljs-number">10</span>);<br>		Integer newCuCount = report.getNewCuCount();<br>		String newCuStr = <span class="hljs-string">"1、"</span> + dateStr + <span class="hljs-string">"新增储客"</span> + newCuCount + <span class="hljs-string">"组，新增量"</span>;<br>		<span class="hljs-keyword">if</span> (newCuCount &lt; <span class="hljs-number">30</span>) &#123;<br>			newCuStr += <span class="hljs-string">"较少，有待提升"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (newCuCount &gt;= <span class="hljs-number">31</span> &amp;&amp; newCuCount &lt;= <span class="hljs-number">60</span>) &#123;<br>			newCuStr += <span class="hljs-string">"尚可，还有提高空间"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (newCuCount &gt;= <span class="hljs-number">61</span> &amp;&amp; newCuCount &lt;= <span class="hljs-number">79</span>) &#123;<br>			newCuStr += <span class="hljs-string">"很多"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (newCuCount &gt; <span class="hljs-number">80</span>) &#123;<br>			newCuStr += <span class="hljs-string">"爆满"</span>;<br>		&#125;<br>		createCellAndRow(style4, newCuStr, row);<br><br>		<span class="hljs-comment">// 累计老客户</span><br>		row = sheet.createRow(<span class="hljs-number">11</span>);<br>		Integer oldCuCount = report.getTotalOldCuCount();<br>		Integer totalCuCount = report.getTotalCuCount();<br>		Double oldCuRate = <span class="hljs-keyword">new</span> Double(SysContent.getTwoNumberForValue(oldCuCount, totalCuCount));<br>		String oldCuStr = <span class="hljs-string">"2、累计老客户总量为"</span> + oldCuCount + <span class="hljs-string">"组，老客户占比为"</span> + oldCuRate + <span class="hljs-string">"%，显示老客户关注度"</span>;<br>		<span class="hljs-keyword">if</span> (oldCuRate &lt; <span class="hljs-number">15</span>) &#123;<br>			oldCuStr += <span class="hljs-string">"较低，有待提升"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (oldCuRate &gt;= <span class="hljs-number">15</span> &amp;&amp; oldCuRate &lt;= <span class="hljs-number">25</span>) &#123;<br>			oldCuStr += <span class="hljs-string">"尚可，还有提高空间"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (oldCuRate &gt;= <span class="hljs-number">25</span> &amp;&amp; oldCuRate &lt;= <span class="hljs-number">40</span>) &#123;<br>			oldCuStr += <span class="hljs-string">"很高"</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (oldCuRate &gt; <span class="hljs-number">40</span>) &#123;<br>			oldCuStr += <span class="hljs-string">"极高"</span>;<br>		&#125;<br>		createCellAndRow(style4, oldCuStr, row);<br><br>		<span class="hljs-comment">// 累计总储客</span><br>		row = sheet.createRow(<span class="hljs-number">12</span>);<br>		String totalOldCuStr = <span class="hljs-string">"3、累计总储客"</span> + totalCuCount + <span class="hljs-string">"组"</span>;<br>		createCellAndRow(style4, totalOldCuStr, row);<br><br>		<span class="hljs-comment">// 成交情况(周报没有，其他有)</span><br>		<span class="hljs-keyword">if</span> (report.getSubscribeHouseCount() != <span class="hljs-keyword">null</span>) &#123;<br>			<br>			<span class="hljs-comment">//空行</span><br>			row = sheet.createRow(<span class="hljs-number">13</span>);<br>			createCellAndRow(style4, <span class="hljs-string">""</span>, row);<br>			<br>			row = sheet.createRow(<span class="hljs-number">14</span>);<br>			createCellAndRow(style2, <span class="hljs-string">"·成交情况"</span>, row);<br><br>			<span class="hljs-comment">// 新增认购套数</span><br>			row = sheet.createRow(<span class="hljs-number">15</span>);<br>			Integer subscribeHouseCount = report.getSubscribeHouseCount();<br>			Double subscribeHouseRate = <span class="hljs-keyword">new</span> Double(report.getSubscribeHouseRate());<br>			String subscribeHouseStr = <span class="hljs-string">"1、"</span> + dateStr + <span class="hljs-string">"新增认购套数"</span> + subscribeHouseCount + <span class="hljs-string">"套，较"</span> + dateStr + <span class="hljs-string">"同期"</span>;<br>			<span class="hljs-keyword">if</span> (subscribeHouseRate &lt; <span class="hljs-number">0</span>) &#123;<br>				subscribeHouseStr += <span class="hljs-string">"减少"</span>;<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				subscribeHouseStr += <span class="hljs-string">"增长"</span>;<br>			&#125;<br>			subscribeHouseStr += Math.abs(subscribeHouseRate) + <span class="hljs-string">"%"</span>;<br>			createCellAndRow(style4, subscribeHouseStr, row);<br><br>			<span class="hljs-comment">// 新增认购金额</span><br>			row = sheet.createRow(<span class="hljs-number">16</span>);<br>			Long subscribeMoney = report.getSubscribeMoney();<br>			Double subscribeMoneyRate = <span class="hljs-keyword">new</span> Double(report.getSubscribeMoneyRate());<br>			String subscribeMoneyStr = <span class="hljs-string">"   新增认购金额"</span> + subscribeMoney + <span class="hljs-string">"万元，较"</span> + dateStr + <span class="hljs-string">"同期"</span>;<br>			<span class="hljs-keyword">if</span> (subscribeHouseRate &lt; <span class="hljs-number">0</span>) &#123;<br>				subscribeMoneyStr += <span class="hljs-string">"减少"</span>;<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				subscribeMoneyStr += <span class="hljs-string">"增长"</span>;<br>			&#125;<br>			subscribeMoneyStr += Math.abs(subscribeMoneyRate) + <span class="hljs-string">"%"</span>;<br>			createCellAndRow(style4, subscribeMoneyStr, row);<br><br>			<span class="hljs-comment">// 新增签约套数</span><br>			row = sheet.createRow(<span class="hljs-number">17</span>);<br>			Integer signCount = report.getSignCount();<br>			Double signRate = <span class="hljs-keyword">new</span> Double(report.getSignRate());<br>			String signStr = <span class="hljs-string">"2、新增签约套数"</span> + signCount + <span class="hljs-string">"套,较"</span> + dateStr + <span class="hljs-string">"同期"</span>;<br>			<span class="hljs-keyword">if</span> (signRate &lt; <span class="hljs-number">0</span>) &#123;<br>				signStr += <span class="hljs-string">"减少"</span>;<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				signStr += <span class="hljs-string">"增长"</span>;<br>			&#125;<br>			signStr += Math.abs(signRate) + <span class="hljs-string">"%"</span>;<br>			createCellAndRow(style4, signStr, row);<br><br>			<span class="hljs-comment">// 新增签约金额</span><br>			row = sheet.createRow(<span class="hljs-number">18</span>);<br>			Long signHouseMoney = report.getSignHouseMoney();<br>			Double signHouseMoneyRate = <span class="hljs-keyword">new</span> Double(report.getSignHouseMoneyRate());<br>			String signHouseMoneyStr = <span class="hljs-string">"   新增签约金额"</span> + signHouseMoney + <span class="hljs-string">"万元，较"</span> + dateStr + <span class="hljs-string">"同期"</span>;<br>			<span class="hljs-keyword">if</span> (signHouseMoneyRate &lt; <span class="hljs-number">0</span>) &#123;<br>				signHouseMoneyStr += <span class="hljs-string">"减少"</span>;<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				signHouseMoneyStr += <span class="hljs-string">"增长"</span>;<br>			&#125;<br>			signHouseMoneyStr += Math.abs(signHouseMoneyRate) + <span class="hljs-string">"%"</span>;<br>			createCellAndRow(style4, signHouseMoneyStr, row);<br><br>			<span class="hljs-comment">// 新接访签约率</span><br>			row = sheet.createRow(<span class="hljs-number">19</span>);<br>			Double newCustomerSignedRate = <span class="hljs-keyword">new</span> Double(report.getNewCustomerSignedRate());<br>			String newCustomerSignedStr = <span class="hljs-string">"3、"</span> + dateStr + <span class="hljs-string">"新客户接访签约率"</span> + newCustomerSignedRate + <span class="hljs-string">"%，接访签约概率"</span>;<br>			<span class="hljs-keyword">if</span> (newCustomerSignedRate &lt; <span class="hljs-number">4</span>) &#123;<br>				newCustomerSignedStr += <span class="hljs-string">"较低，与理想值差距大"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (newCustomerSignedRate &gt;= <span class="hljs-number">4</span> &amp;&amp; newCustomerSignedRate &lt;= <span class="hljs-number">6</span>) &#123;<br>				newCustomerSignedStr += <span class="hljs-string">"尚可，还有提高空间"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (newCustomerSignedRate &gt;= <span class="hljs-number">6</span> &amp;&amp; newCustomerSignedRate &lt;= <span class="hljs-number">7</span>) &#123;<br>				newCustomerSignedStr += <span class="hljs-string">"很高"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (newCustomerSignedRate &gt; <span class="hljs-number">7</span>) &#123;<br>				newCustomerSignedStr += <span class="hljs-string">"非常高"</span>;<br>			&#125;<br>			createCellAndRow(style4, newCustomerSignedStr, row);<br><br>			<span class="hljs-comment">// 储客签约率</span><br>			row = sheet.createRow(<span class="hljs-number">20</span>);<br>			Double momeryCustomerSignedRate = <span class="hljs-keyword">new</span> Double(report.getMomeryCustomerSignedRate());<br>			String momeryCustomerSignedStr = <span class="hljs-string">"4、储客签约率"</span> + momeryCustomerSignedRate + <span class="hljs-string">"%，储备客户签约概率"</span>;<br>			<span class="hljs-keyword">if</span> (momeryCustomerSignedRate &lt; <span class="hljs-number">7</span>) &#123;<br>				momeryCustomerSignedStr += <span class="hljs-string">"较低，与理想值差距大"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (momeryCustomerSignedRate &gt;= <span class="hljs-number">7</span> &amp;&amp; momeryCustomerSignedRate &lt;= <span class="hljs-number">12</span>) &#123;<br>				momeryCustomerSignedStr += <span class="hljs-string">"尚可，还有提高空间"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (momeryCustomerSignedRate &gt;= <span class="hljs-number">12</span> &amp;&amp; momeryCustomerSignedRate &lt;= <span class="hljs-number">15</span>) &#123;<br>				momeryCustomerSignedStr += <span class="hljs-string">"很高"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (momeryCustomerSignedRate &gt; <span class="hljs-number">15</span>) &#123;<br>				momeryCustomerSignedStr += <span class="hljs-string">"非常高"</span>;<br>			&#125;<br>			createCellAndRow(style4, momeryCustomerSignedStr, row);<br><br>			<span class="hljs-comment">// 老客户签约率</span><br>			row = sheet.createRow(<span class="hljs-number">21</span>);<br>			Double oldCustomerSignedRate = <span class="hljs-keyword">new</span> Double(report.getOldCustomerSignedRate());<br>			String oldCustomerSignedStr = <span class="hljs-string">"5、老客户签约率为23.2%，高意向客户签约概率"</span>;<br>			<span class="hljs-keyword">if</span> (oldCustomerSignedRate &lt; <span class="hljs-number">25</span>) &#123;<br>				oldCustomerSignedStr += <span class="hljs-string">"较低，与理想值差距大"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (oldCustomerSignedRate &gt;= <span class="hljs-number">25</span> &amp;&amp; oldCustomerSignedRate &lt;= <span class="hljs-number">35</span>) &#123;<br>				oldCustomerSignedStr += <span class="hljs-string">"尚可，还有提高空间"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (oldCustomerSignedRate &gt;= <span class="hljs-number">35</span> &amp;&amp; oldCustomerSignedRate &lt;= <span class="hljs-number">50</span>) &#123;<br>				oldCustomerSignedStr += <span class="hljs-string">"很高"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (oldCustomerSignedRate &gt; <span class="hljs-number">50</span>) &#123;<br>				oldCustomerSignedStr += <span class="hljs-string">"非常高"</span>;<br>			&#125;<br>			createCellAndRow(style4, oldCustomerSignedStr, row);<br><br>			<span class="hljs-comment">// 认购客户签约率</span><br>			row = sheet.createRow(<span class="hljs-number">22</span>);<br>			Double contratCuSignedRate = <span class="hljs-keyword">new</span> Double(report.getContratCuSignedRate());<br>			String contratCuSignedStr = <span class="hljs-string">"6、认购客户签约率为92%，已认购客户签约率"</span>;<br>			<span class="hljs-keyword">if</span> (contratCuSignedRate &lt; <span class="hljs-number">95</span>) &#123;<br>				contratCuSignedStr += <span class="hljs-string">"不高，较多退订或拒签"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (contratCuSignedRate &gt;= <span class="hljs-number">95</span> &amp;&amp; contratCuSignedRate &lt;= <span class="hljs-number">97</span>) &#123;<br>				contratCuSignedStr += <span class="hljs-string">"尚可，一定数量退订或拒签"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (contratCuSignedRate &gt;= <span class="hljs-number">97</span> &amp;&amp; contratCuSignedRate &lt;= <span class="hljs-number">99</span>) &#123;<br>				contratCuSignedStr += <span class="hljs-string">"很高"</span>;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (contratCuSignedRate &gt; <span class="hljs-number">99</span>) &#123;<br>				contratCuSignedStr += <span class="hljs-string">"非常高"</span>;<br>			&#125;<br>			createCellAndRow(style4, contratCuSignedStr, row);<br><br>			<span class="hljs-comment">//空行</span><br>			row = sheet.createRow(<span class="hljs-number">23</span>);<br>			createCellAndRow(style4, <span class="hljs-string">""</span>, row);<br>			<br>			<span class="hljs-comment">//底侧</span><br>			row = sheet.createRow(<span class="hljs-number">24</span>);<br>			createCellAndRow(style5, <span class="hljs-string">""</span>, row);<br>			<br>		&#125;<span class="hljs-keyword">else</span>&#123;<br>			row = sheet.createRow(<span class="hljs-number">13</span>);<br>			createCellAndRow(style5, <span class="hljs-string">""</span>, row);<br>		&#125;<br><br>		<span class="hljs-keyword">try</span> &#123;<br>			workbook.write(out);<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">createCellAndRow</span><span class="hljs-params">(HSSFCellStyle style, String text, HSSFRow row)</span> </span>&#123;<br>		HSSFCell cell = row.createCell(<span class="hljs-number">0</span>);<br>		cell.setCellStyle(style);<br>		HSSFRichTextString rs = <span class="hljs-keyword">new</span> HSSFRichTextString(text);<br>		cell.setCellValue(rs);<br>	&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 上传Excel</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> fileNewName</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> uploadFile</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">uploadExcel</span><span class="hljs-params">(String fileNewName,ByteArrayInputStream uploadFile)</span></span>&#123;<br>		<span class="hljs-comment">// 设置用户属性, 包括appid, secretId和SecretKey</span><br>				<span class="hljs-comment">// 这些属性可以通过cos控制台获取(https://console.qcloud.com/cos)</span><br>				String version = PropertiesUtil.getValue(<span class="hljs-string">"version"</span>);<br>					 <span class="hljs-keyword">long</span> appId = <span class="hljs-string">"你的appId"</span>;<br>	                 String secretId = <span class="hljs-string">"你的secretId "</span>;<br>	                 String secretKey = <span class="hljs-string">"你的secretKey "</span>;<br>				<br>				<span class="hljs-comment">// 设置要操作的bucket</span><br>				String bucketName = <span class="hljs-string">"root"</span>;<br>				<span class="hljs-comment">// 初始化客户端配置</span><br>				ClientConfig clientConfig = <span class="hljs-keyword">new</span> ClientConfig();<br>				<span class="hljs-comment">// 设置bucket所在的区域，比如广州(gz), 天津(tj)</span><br>				clientConfig.setRegion(<span class="hljs-string">"sh"</span>);<br>				<span class="hljs-comment">// 初始化秘钥信息</span><br>				Credentials cred = <span class="hljs-keyword">new</span> Credentials(appId, secretId, secretKey);<br>				<span class="hljs-comment">// 初始化cosClient</span><br>				COSClient cosClient = <span class="hljs-keyword">new</span> COSClient(clientConfig, cred);<br>				<span class="hljs-comment">// 文件操作 //</span><br>				<span class="hljs-comment">// 1. 上传文件(默认不覆盖)</span><br>				<span class="hljs-comment">// 将本地的local_file_1.txt上传到bucket下的根分区下,并命名为sample_file.txt</span><br>				<span class="hljs-comment">// 默认不覆盖, 如果cos上已有文件, 则返回错误</span><br>				String cosFilePath = <span class="hljs-string">"/report/"</span> + fileNewName;<br>				<br>				<span class="hljs-keyword">byte</span>[] localFilePath1 = <span class="hljs-keyword">null</span>;<br>				<span class="hljs-keyword">try</span> &#123;<br>					localFilePath1 = ConvertUtil.toByteArray(uploadFile);<br>				&#125; <span class="hljs-keyword">catch</span> (IOException e1) &#123;<br>					<span class="hljs-comment">// TODO Auto-generated catch block</span><br>					e1.printStackTrace();<br>				&#125;<br>				<br>				UploadFileRequest uploadFileRequest = <span class="hljs-keyword">new</span> UploadFileRequest(bucketName, cosFilePath, localFilePath1);<br>				uploadFileRequest.setEnableShaDigest(<span class="hljs-keyword">false</span>);<br>				String uploadFileRet = cosClient.uploadFile(uploadFileRequest);<br>				System.out.println(<span class="hljs-string">"upload file ret:"</span> + uploadFileRet);<br>				<span class="hljs-comment">//获取保存路径</span><br>				ObjectMapper om = <span class="hljs-keyword">new</span> ObjectMapper();<br>				HashMap map = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br>				<span class="hljs-keyword">try</span> &#123;<br>					map = om.readValue(uploadFileRet, HashMap<span class="hljs-class">.<span class="hljs-keyword">class</span>)</span>;<br>				&#125; <span class="hljs-keyword">catch</span> (JsonParseException e) &#123;<br>					<span class="hljs-comment">// TODO Auto-generated catch block</span><br>					e.printStackTrace();<br>				&#125; <span class="hljs-keyword">catch</span> (JsonMappingException e) &#123;<br>					<span class="hljs-comment">// TODO Auto-generated catch block</span><br>					e.printStackTrace();<br>				&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>					<span class="hljs-comment">// TODO Auto-generated catch block</span><br>					e.printStackTrace();<br>				&#125;<br>				HashMap&lt;String, String&gt; value = (HashMap&lt;String, String&gt;) map.get(<span class="hljs-string">"data"</span>);<br>				<span class="hljs-keyword">return</span> value.get(<span class="hljs-string">"source_url"</span>);<br>				<br>	&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">addReportExcelToDB</span><span class="hljs-params">(ReportResult rr, String url)</span> </span>&#123;<br>		<br>		<span class="hljs-keyword">if</span>(StringUtils.isEmpty(url))&#123;<br>			<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>		&#125;<br>		<span class="hljs-keyword">if</span>(rr == <span class="hljs-keyword">null</span>)&#123;<br>			<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>		&#125;<br>		<br>		ProjectReportRecord prr = <span class="hljs-keyword">new</span> ProjectReportRecord();<br>		prr.setCreateTime(DateUtil.format(<span class="hljs-keyword">new</span> Date()));<br>		prr.setProjectId(rr.getProjectId());<br>		prr.setProjectName(rr.getProjectName());<br>		prr.setStartTime(rr.getStartTime());<br>		prr.setEndTime(rr.getEndTime());<br>		prr.setUrl(url);<br>		String report = <span class="hljs-string">""</span>;<br>		<span class="hljs-keyword">if</span>(<span class="hljs-string">"案场周报"</span>.equals(rr.getReportName()))&#123;<br>			report = <span class="hljs-string">"week"</span>;<br>		&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-string">"案场月报"</span>.equals(rr.getReportName()))&#123;<br>			report = <span class="hljs-string">"month"</span>;<br>		&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-string">"案场季报"</span>.equals(rr.getReportName()))&#123;<br>			report = <span class="hljs-string">"quarter"</span>;<br>		&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-string">"案场半年报"</span>.equals(rr.getReportName()))&#123;<br>			report = <span class="hljs-string">"half"</span>;<br>		&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-string">"案场年报"</span>.equals(rr.getReportName()))&#123;<br>			report = <span class="hljs-string">"year"</span>;<br>		&#125;<span class="hljs-keyword">else</span>&#123;<br>			report = <span class="hljs-string">"other"</span>;<br>		&#125;<br>		prr.setReportName(report);<br>		<br>		baseDao.save(prr);<br>		<br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>	&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="生成的文件示例"><a href="#生成的文件示例" class="headerlink" title="生成的文件示例"></a>生成的文件示例</h3><p><strong>周报或者其他报告都是后台自动根据时间进行判断的</strong></p>
+<p><strong>周报</strong><br><img    class="lazyload" data-original="http://img.blog.csdn.net/20171020105154962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvV2ludGVyX2NoZW4wMDE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">这里写图片描述</span></p>
+<p><strong>季报</strong></p>
+<p><img    class="lazyload" data-original="http://img.blog.csdn.net/20171020105212669?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvV2ludGVyX2NoZW4wMDE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">这里写图片描述</span></p>
+<p>以上</p>
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>winter chen</li>
+    <li><strong>本文链接：</strong><a href="https://blog.winterchen.com/2017/10/21/java-make-excel-poi-to-upload-cloud/index.html" title="https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2017&#x2F;10&#x2F;21&#x2F;java-make-excel-poi-to-upload-cloud&#x2F;index.html">https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2017&#x2F;10&#x2F;21&#x2F;java-make-excel-poi-to-upload-cloud&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poi/" rel="tag">poi</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a href="/2017/10/25/layui-page-1.0/"><i class="iconfont iconleft"></i>layui完美分页，ajax请求分页（真分页）</a>
+    <a href="/2017/09/26/spring-log4j/">Spring中使用log4j详细配置<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+    <div class="btn" id="comments-btn">查看评论</div>
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk" class="gitalk"></div>
+<script defer src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  window.onload = function () {
+    var gitalk = new Gitalk({
+      clientID: '77f2adc33e0112d086d7',
+      clientSecret: 'e926aa3a621556609b2c2b76d89320fa524e23cd',
+      id: window.location.pathname,
+      repo: 'WinterChenS.github.io',
+      owner: 'WinterChenS',
+      admin: 'WinterChenS'
+    });
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        gitalk.render('gitalk');
+      });
+    } else {
+      gitalk.render('gitalk');
+    }
+  }
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#需求"><span class="toc-text">需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发思路："><span class="toc-text">开发思路：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工具"><span class="toc-text">工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据"><span class="toc-text">数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码"><span class="toc-text">代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成的文件示例"><span class="toc-text">生成的文件示例</span></a></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="https://github.com/winterchens "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:i@winterchen.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+    <div class="search">
+  <div class="search-container">
+    <div class="search-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <div class="search-input-wrapper">
+      <i class="search-input-icon iconfont iconsearch"></i>
+      <input class="search-input" type="search" id="search-input" placeholder="Search..." autofocus autocomplete="off"
+        autocorrect="off" autocapitalize="off">
+    </div>
+    <div class="search-output" id="search-output"></div>
+  </div>
+</div>
+  
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <script>
+    window.ga = window.ga || function () {
+      (ga.q = ga.q || []).push(arguments)
+    };
+    ga.l = +new Date;
+    ga('create', 'UA-155319408-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script defer src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script>
+    var _mtac = {};
+    (function () {
+      var mta = document.createElement("script");
+      mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "500722607");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+
+
+
+</html>

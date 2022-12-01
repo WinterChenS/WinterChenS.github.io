@@ -1,0 +1,750 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-Hans" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Archive - Luis Blog: 2020/2</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content="java,spring,springboot,springcloud,mybatis,jQuery,html,css">
+  <meta name="description" content="java开发工程师，喜欢代码，喜欢技术">
+  <meta name="author" content="winter chen">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xt256.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: '',
+        wechat: ''
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://gitee.com/winter_chen/img/raw/master/blog/20210413131918.jpeg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: true,
+        path: '/search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+        <i class="iconfont iconsearch j-navbar-search"></i>
+      
+    </div>
+    <div class="center">归档</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="https://www.winterchen.com " target="_blank" rel="noopener" class="underline "> 主页</a>
+      </li><li class="menu-item">
+        <a href="/ " class="underline "> 博客首页</a>
+      </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 摄影</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <section class="archive">
+    <div class="archive-container">
+      <div class="archive-post">
+        <h3 class="archive-total">归档: 66 篇</h3>
+        
+        
+          
+            <h3 class="archive-year">2021 年</h3>
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2021/11/09/2021-11-09-spring-cloud-hoxton-8-seata/">November 09</a>
+            <a class="archive-title" href="/2021/11/09/2021-11-09-spring-cloud-hoxton-8-seata/">SpringCloud系列教程(八)之整合seata分布式事务</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2021/08/06/2021-08-06-spring-cloud-hoxton-7-sleuth/">August 06</a>
+            <a class="archive-title" href="/2021/08/06/2021-08-06-spring-cloud-hoxton-7-sleuth/">SpringCloud系列教程(七)之使用Spring Cloud Sleuth+Zipkin实现链路追踪</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2021/08/05/2021-08-05-spring-cloud-hoxton-6-sentinel/">August 05</a>
+            <a class="archive-title" href="/2021/08/05/2021-08-05-spring-cloud-hoxton-6-sentinel/">SpringCloud系列教程(六)之SpringCloud 使用sentinel作为熔断器</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2021/08/04/2021-08-04-spring-cloud-hoxton-5-swagger/">August 04</a>
+            <a class="archive-title" href="/2021/08/04/2021-08-04-spring-cloud-hoxton-5-swagger/">SpringCloud系列教程(五)之SpringCloud Gateway 网关聚合开发文档 swagger knife4j 和登录权限统一验证</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2021/08/03/2021-08-03-spring-cloud-hoxton-4-gateway/">August 03</a>
+            <a class="archive-title" href="/2021/08/03/2021-08-03-spring-cloud-hoxton-4-gateway/">SpringCloud系列教程(四)之SpringCloud Gateway</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2021/08/02/2021-08-02-spring-cloud-hoxton-3-feign/">August 02</a>
+            <a class="archive-title" href="/2021/08/02/2021-08-02-spring-cloud-hoxton-3-feign/">SpringCloud系列教程(三)之Open Feign</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2021/08/01/2021-08-01-spring-cloud-hoxton-2-nacos/">August 01</a>
+            <a class="archive-title" href="/2021/08/01/2021-08-01-spring-cloud-hoxton-2-nacos/">SpringCloud系列教程(二)之Nacos</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2021/07/23/2021-07-23-spring-cloud-hoxton-1/">July 23</a>
+            <a class="archive-title" href="/2021/07/23/2021-07-23-spring-cloud-hoxton-1/">SpringCloud系列教程开篇</a>
+          </div>
+        
+          
+            <h3 class="archive-year">2020 年</h3>
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/12/28/2020-12-28-mongodb-mutil-source/">December 28</a>
+            <a class="archive-title" href="/2020/12/28/2020-12-28-mongodb-mutil-source/">mongodb多数据源之mongotemplate和事务的配置</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/12/01/2020-12-01-springboot-oozie/">December 01</a>
+            <a class="archive-title" href="/2020/12/01/2020-12-01-springboot-oozie/">springboot集成Oozie实战</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/12/01/2020-12-01-springboot-hive/">December 01</a>
+            <a class="archive-title" href="/2020/12/01/2020-12-01-springboot-hive/">springboot集成hive实战</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/12/01/2020-12-01-springboot-hadoop-hdfs-mapreduce/">December 01</a>
+            <a class="archive-title" href="/2020/12/01/2020-12-01-springboot-hadoop-hdfs-mapreduce/">springboot集成hadoop实战</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/11/30/2020-11-30-mapstruct-convert-userid-to-username/">November 30</a>
+            <a class="archive-title" href="/2020/11/30/2020-11-30-mapstruct-convert-userid-to-username/">mapstruct 高级用法之userid转换为username</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/08/28/2020-08-28-vercel-use/">August 28</a>
+            <a class="archive-title" href="/2020/08/28/2020-08-28-vercel-use/">站点托管CDN加速的平台vercel使用之组织免费使用</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/08/26/2020-08-26-new-source-site/">August 26</a>
+            <a class="archive-title" href="/2020/08/26/2020-08-26-new-source-site/">整理了一个资源分享的站点-tool.winterchen.com</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/08/25/2020-08-25-share-tools/">August 25</a>
+            <a class="archive-title" href="/2020/08/25/2020-08-25-share-tools/">软件分享-免费的网站状态监控平台</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/07/05/2020-07-05-summer/">July 05</a>
+            <a class="archive-title" href="/2020/07/05/2020-07-05-summer/">风景摄影-关于夏天的雨</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/07/05/2020-07-05-summer-with-rain/">July 05</a>
+            <a class="archive-title" href="/2020/07/05/2020-07-05-summer-with-rain/">人像摄影-关于夏天的定义</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/06/14/2020-06-14-sunday/">June 14</a>
+            <a class="archive-title" href="/2020/06/14/2020-06-14-sunday/">一个人的周末</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/06/13/2020-06-13-hexo-deploy-from-github-ci-cd/">June 13</a>
+            <a class="archive-title" href="/2020/06/13/2020-06-13-hexo-deploy-from-github-ci-cd/">如何使用 GitHub Actions 实现 Hexo 博客的 CICD</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/04/21/2020-04-21-sharingsphere-springboot/">April 21</a>
+            <a class="archive-title" href="/2020/04/21/2020-04-21-sharingsphere-springboot/">springboot 整合 Shardingsphere 4.0 分库分表</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/04/14/2020-04-14-jenkins-docker/">April 14</a>
+            <a class="archive-title" href="/2020/04/14/2020-04-14-jenkins-docker/">jenkins 持续集成 docker服务到堡垒机</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/03/31/2020-03-31-raspberry-docker-redis/">March 31</a>
+            <a class="archive-title" href="/2020/03/31/2020-03-31-raspberry-docker-redis/">树莓派 docker 运行 redis</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/03/31/2020-03-31-raspberry-docker-mysql/">March 31</a>
+            <a class="archive-title" href="/2020/03/31/2020-03-31-raspberry-docker-mysql/">树莓派 docker 运行 mysql</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/03/21/2020-03-21-spring-sakura/">March 21</a>
+            <a class="archive-title" href="/2020/03/21/2020-03-21-spring-sakura/">人像摄影-樱花与儿童</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/03/14/2020-03-14-docker-jenkins/">March 14</a>
+            <a class="archive-title" href="/2020/03/14/2020-03-14-docker-jenkins/">jenkins+docker自动化运维发布</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/03/08/2020-03-08-black-photo-by-strawberry/">March 08</a>
+            <a class="archive-title" href="/2020/03/08/2020-03-08-black-photo-by-strawberry/">静物摄影-草莓</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2020/02/27/2020-02-27-black-and-white/">February 27</a>
+            <a class="archive-title" href="/2020/02/27/2020-02-27-black-and-white/">人像摄影-黑白</a>
+          </div>
+        
+          
+            <h3 class="archive-year">2019 年</h3>
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2019/10/09/2019-10-09-arithmetic-15-3-sum/">October 09</a>
+            <a class="archive-title" href="/2019/10/09/2019-10-09-arithmetic-15-3-sum/">每日一道算法题-三个数的和</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2019/10/08/2019-10-08-arithmetic-20-valid-parentheses/">October 08</a>
+            <a class="archive-title" href="/2019/10/08/2019-10-08-arithmetic-20-valid-parentheses/">每日一道算法题-有效的括号</a>
+          </div>
+        
+          
+            <h3 class="archive-year">2018 年</h3>
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/12/01/2018-12-01-hangzhou-baita-autumn/">December 01</a>
+            <a class="archive-title" href="/2018/12/01/2018-12-01-hangzhou-baita-autumn/">再访白塔公园-秋</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/11/26/2018-11-26-hangzhou/">November 26</a>
+            <a class="archive-title" href="/2018/11/26/2018-11-26-hangzhou/">杭州滨江夜景</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/11/04/2018-11-04-xianghu/">November 04</a>
+            <a class="archive-title" href="/2018/11/04/2018-11-04-xianghu/">湘湖-秋</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/10/29/2018-10-29-xitang-hanfu/">October 29</a>
+            <a class="archive-title" href="/2018/10/29/2018-10-29-xitang-hanfu/">西塘汉服节</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/10/21/2018-10-21-woman/">October 21</a>
+            <a class="archive-title" href="/2018/10/21/2018-10-21-woman/">初秋-钱塘江人像</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/10/04/2018-10-04-old-shagnhai/">October 04</a>
+            <a class="archive-title" href="/2018/10/04/2018-10-04-old-shagnhai/">上海影视城</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/10/01/2018-10-01-shanghai/">October 01</a>
+            <a class="archive-title" href="/2018/10/01/2018-10-01-shanghai/">上海郊区</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/09/15/2018-09-15-friend/">September 15</a>
+            <a class="archive-title" href="/2018/09/15/2018-09-15-friend/">朋友</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/09/12/2018-09-12-summer-over/">September 12</a>
+            <a class="archive-title" href="/2018/09/12/2018-09-12-summer-over/">夏天的尾巴</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/08/12/2018-08-20-summer-sunflower/">August 12</a>
+            <a class="archive-title" href="/2018/08/12/2018-08-20-summer-sunflower/">向日葵</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/07/25/spring-boot-mybatis-hikaricp/">July 25</a>
+            <a class="archive-title" href="/2018/07/25/spring-boot-mybatis-hikaricp/">springboot整合mybatis 使用HikariCP连接池</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/07/05/2018-07-05-hangzhou-night/">July 05</a>
+            <a class="archive-title" href="/2018/07/05/2018-07-05-hangzhou-night/">杭州-夜色</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/06/25/2018-06-23-summer-after-rain/">June 25</a>
+            <a class="archive-title" href="/2018/06/25/2018-06-23-summer-after-rain/">初夏-荷</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/06/19/2018-06-17-travel/">June 19</a>
+            <a class="archive-title" href="/2018/06/19/2018-06-17-travel/">九溪十八涧行</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/06/09/2018-06-09-pretty-gril/">June 09</a>
+            <a class="archive-title" href="/2018/06/09/2018-06-09-pretty-gril/">犹豫的眼神</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/05/30/spring-boot-mybatis-mutil-database/">May 30</a>
+            <a class="archive-title" href="/2018/05/30/spring-boot-mybatis-mutil-database/">springboot2.0 mybatis 使用多数据源</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/05/30/centos7-install-nginx/">May 30</a>
+            <a class="archive-title" href="/2018/05/30/centos7-install-nginx/">如何在CentOS 7上安装和配置Nginx</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/05/30/spring-autowired/">May 30</a>
+            <a class="archive-title" href="/2018/05/30/spring-autowired/">当springMVC上下文尚未初始化的时候如何@Autowired注入对象呢？</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/05/30/spring-boot-conditional-on-expression/">May 30</a>
+            <a class="archive-title" href="/2018/05/30/spring-boot-conditional-on-expression/">springboot 中 @ConditionalOnExpression注解 在特定情况下使用相关配置或者实例化bean</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/05/26/java-source-code-arraylist/">May 26</a>
+            <a class="archive-title" href="/2018/05/26/java-source-code-arraylist/">Java源码之旅(1) - ArrayList</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/05/09/my-spring-interceptor/">May 09</a>
+            <a class="archive-title" href="/2018/05/09/my-spring-interceptor/">spring中添加自定义的拦截器</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/04/23/about-tree-body-1/">April 23</a>
+            <a class="archive-title" href="/2018/04/23/about-tree-body-1/">关于《三体》的一些读后感-农场主和射手</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/04/21/springboot2-mybatis/">April 21</a>
+            <a class="archive-title" href="/2018/04/21/springboot2-mybatis/">springboot2.0 Mybatis 整合 (springboot2.0版本)</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/04/10/fastdfs-centos7/">April 10</a>
+            <a class="archive-title" href="/2018/04/10/fastdfs-centos7/">用FastDFS一步步搭建文件管理系统(CentOS 7)</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/03/31/how_to_impromptu_speech/">March 31</a>
+            <a class="archive-title" href="/2018/03/31/how_to_impromptu_speech/">如何提高即兴演讲水平？</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/03/27/why_90_not_marry/">March 27</a>
+            <a class="archive-title" href="/2018/03/27/why_90_not_marry/">为什么说90后已经不想结婚了</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/01/18/java-read-mpp-file/">January 18</a>
+            <a class="archive-title" href="/2018/01/18/java-read-mpp-file/">Java使用mpxj导入.mpp格式的Project文件（甘特图）</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/01/18/hibernate-sql/">January 18</a>
+            <a class="archive-title" href="/2018/01/18/hibernate-sql/">Hibernate 自定义查询sql 并使用自定义对象接收查询结果</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2018/01/18/spring-boot-mybatis-annotation/">January 18</a>
+            <a class="archive-title" href="/2018/01/18/spring-boot-mybatis-annotation/">Spring boot Mybatis 整合（注解版）</a>
+          </div>
+        
+          
+            <h3 class="archive-year">2017 年</h3>
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2017/10/25/layui-page-2.0/">October 25</a>
+            <a class="archive-title" href="/2017/10/25/layui-page-2.0/">layui完美分页，ajax请求分页（真分页） 【2.0版本】</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2017/10/25/layui-page-1.0/">October 25</a>
+            <a class="archive-title" href="/2017/10/25/layui-page-1.0/">layui完美分页，ajax请求分页（真分页）</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2017/10/21/java-make-excel-poi-to-upload-cloud/">October 21</a>
+            <a class="archive-title" href="/2017/10/21/java-make-excel-poi-to-upload-cloud/">Java导出Excel文档（poi），并上传到腾讯云对象存储服务器</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2017/09/26/spring-log4j/">September 26</a>
+            <a class="archive-title" href="/2017/09/26/spring-log4j/">Spring中使用log4j详细配置</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2017/09/26/mysql-text/">September 26</a>
+            <a class="archive-title" href="/2017/09/26/mysql-text/">解决Mysql存入大量TEXT类型的数据报错</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2017/09/25/springboot-mybatis/">September 25</a>
+            <a class="archive-title" href="/2017/09/25/springboot-mybatis/">Spring boot Mybatis 整合（完整版）</a>
+          </div>
+        
+          
+          <div class="archive-item">
+            <a class="archive-date" href="/2017/09/25/java-print-helloworld/">September 25</a>
+            <a class="archive-title" href="/2017/09/25/java-print-helloworld/">java优雅的输出helloWorld</a>
+          </div>
+        
+      </div>
+    </div>
+  </section>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="https://github.com/winterchens "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:i@winterchen.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+    <div class="search">
+  <div class="search-container">
+    <div class="search-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <div class="search-input-wrapper">
+      <i class="search-input-icon iconfont iconsearch"></i>
+      <input class="search-input" type="search" id="search-input" placeholder="Search..." autofocus autocomplete="off"
+        autocorrect="off" autocapitalize="off">
+    </div>
+    <div class="search-output" id="search-output"></div>
+  </div>
+</div>
+  
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <script>
+    window.ga = window.ga || function () {
+      (ga.q = ga.q || []).push(arguments)
+    };
+    ga.l = +new Date;
+    ga('create', 'UA-155319408-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script defer src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script>
+    var _mtac = {};
+    (function () {
+      var mta = document.createElement("script");
+      mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "500722607");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+
+
+
+</html>

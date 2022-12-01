@@ -1,0 +1,561 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-Hans" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>SpringCloud系列教程(三)之Open Feign - Luis Blog</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content="java,spring,springboot,springcloud,mybatis,jQuery,html,css, springcloud">
+  <meta name="description" content="
+阅读提醒：
+
+
+本文面向的是有一定springboo...">
+  <meta name="author" content="winter chen">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xt256.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: '',
+        wechat: ''
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://gitee.com/winter_chen/img/raw/master/blog/20210413131918.jpeg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: true,
+        path: '/search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+        <i class="iconfont iconsearch j-navbar-search"></i>
+      
+    </div>
+    <div class="center">SpringCloud系列教程(三)之Open Feign</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="https://www.winterchen.com " target="_blank" rel="noopener" class="underline "> 主页</a>
+      </li><li class="menu-item">
+        <a href="/ " class="underline "> 博客首页</a>
+      </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 摄影</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046763540560.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">SpringCloud系列教程(三)之Open Feign</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>August 02, 2021</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>14801</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <blockquote>
+<p>阅读提醒：</p>
+</blockquote>
+<ol>
+<li>本文面向的是有一定springboot基础者</li>
+<li>本次教程使用的Spring Cloud Hoxton RELEASE版本</li>
+<li>本文依赖上一篇的工程，请查看上一篇文章以做到无缝衔接，或者直接下载源码：<a href="https://github.com/WinterChenS/spring-cloud-hoxton-study" target="_blank" rel="noopener">https://github.com/WinterChenS/spring-cloud-hoxton-study</a></li>
+</ol>
+<h2 id="前情概要"><a href="#前情概要" class="headerlink" title="前情概要"></a>前情概要</h2><ul>
+<li><a href="https://juejin.cn/post/6987998097209032741" target="_blank" rel="noopener">SpringCloud系列教程(一)开篇</a></li>
+<li><a href="https://juejin.cn/post/6991323018802757662" target="_blank" rel="noopener">SpringCloud系列教程(二)之Nacos | 8月更文挑战 (juejin.cn)</a></li>
+</ul>
+<h2 id="本文概览"><a href="#本文概览" class="headerlink" title="本文概览"></a>本文概览</h2><ul>
+<li>RPC是什么？</li>
+<li>Spring Cloud如何整合openfeign</li>
+<li>如何使用ribbon和Hystrix 进行服务的负载均衡和服务熔断</li>
+<li>实际的应用场景</li>
+</ul>
+<blockquote>
+<p>上篇文章介绍了Spring Cloud如何整合Nacos作为配置中心和注册中心，接下来将介绍如何结合<br>Open Feign进行远程服务调用。在讲解OpenFeign之前我们需要了解一下RPC的基础概念。</p>
+</blockquote>
+<p>本文中用到的demo源码地址：<a href="https://github.com/WinterChenS/spring-cloud-hoxton-study" target="_blank" rel="noopener">https://github.com/WinterChenS/spring-cloud-hoxton-study</a></p>
+<h2 id="什么是RPC？"><a href="#什么是RPC？" class="headerlink" title="什么是RPC？"></a>什么是RPC？</h2><blockquote>
+<p>在分布式计算，<strong>远程过程调用</strong>（英语：<strong>Remote Procedure Call</strong>，缩写为 RPC）是一个计算机通信协议。该协议允许运行于一台计算机的程序调用另一个地址空间（通常为一个开放网络的一台计算机）的子程序，而程序员就像调用本地程序一样，无需额外地为这个交互作用编程（无需关注细节）。RPC是一种服务器-客户端（Client/Server）模式，经典实现是一个通过发送请求-接受回应进行信息交互的系统。<br>如果涉及的软件采用面向对象编程，那么远程过程调用亦可称作远程调用或远程方法调用，例：Java RMI。<br>RPC是一种进程间通信的模式，程序分布在不同的地址空间里。如果在同一主机里，RPC可以通过不同的虚拟地址空间（即便使用相同的物理地址）进行通讯，而在不同的主机间，则通过不同的物理地址进行交互。许多技术（常常是不兼容）都是基于这种概念而实现的。<br>                                                                                                                — 引用自维基百科</p>
+</blockquote>
+<p>Feign与RPC的关系是什么？为什么有人觉得Feign是伪RPC？</p>
+<p>其实Feign实现了可以通过像调用本地方法去调用远程服务的话，就是RPC，RPC最关键的两个协议是：</p>
+<ol>
+<li>通讯协议</li>
+<li>序列化协议</li>
+</ol>
+<p>常用的rpc框架有：open feign 和 dubbo，feign基于http协议，dubbo基于tcp协议。</p>
+<h3 id="feign的原理："><a href="#feign的原理：" class="headerlink" title="feign的原理："></a>feign的原理：</h3><p>feign集成了两个重要的模块：<strong>ribbon</strong>，<strong>Hystrix</strong> 来实现<strong>负载均衡</strong>和<strong>服务熔断，</strong>ribbon内置了<strong>RestTemplate,</strong> RestTemplate基于HTTP，所以说feign基于HTTP。</p>
+<p>Feign通过处理注解，将请求模板化，当实际调用的时候，传入参数，根据参数再应用到请求上，进而转化成真正的 Request 请求。通过Feign以及JAVA的动态代理机制，使得Java 开发人员，可以不用通过HTTP框架去封装HTTP请求报文的方式，完成远程服务的HTTP调用。</p>
+<h2 id="Spring-Cloud集成feign"><a href="#Spring-Cloud集成feign" class="headerlink" title="Spring Cloud集成feign"></a>Spring Cloud集成feign</h2><p>根据上篇的文章中我们使用的Nacos作为代码基础，在此之上集成Feign，所以请查看上一篇文章以做到无缝衔接。</p>
+<h3 id="spring-cloud-nacos-provider-修改："><a href="#spring-cloud-nacos-provider-修改：" class="headerlink" title="spring-cloud-nacos-provider 修改："></a>spring-cloud-nacos-provider 修改：</h3><p>在工程<code>spring-cloud-nacos-provider</code> 中增加依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- springCloud-feign --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.cloud<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>新建一个类：<code>NacosProviderClient</code> 并增加注解：<code>@FeignClient(value = &quot;winter-nacos-provider&quot;)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FeignClient</span>(value = <span class="hljs-string">"winter-nacos-provider"</span>)<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">NacosProviderClient</span> </span>&#123;<br><br>    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/nacos/feign-test/&#123;string&#125;"</span>)<br>    <span class="hljs-function">String <span class="hljs-title">echo2</span><span class="hljs-params">(@PathVariable String string)</span></span>;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>类：<code>NacosController</code> 增加方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"feign-test/&#123;string&#125;"</span>)<br><span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">feignTest</span><span class="hljs-params">(@PathVariable String string)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">"Hello feign "</span> + string;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="spring-cloud-nacos-consumer-修改："><a href="#spring-cloud-nacos-consumer-修改：" class="headerlink" title="spring-cloud-nacos-consumer 修改："></a>spring-cloud-nacos-consumer 修改：</h3><p>在工程<code>spring-cloud-nacos-consumer</code> 中增加依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- springCloud-feign --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.cloud<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-comment">&lt;!-- 对于服务provider的依赖 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.winterchen<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-cloud-nacos-provider<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>0.0.1-SNAPSHOT<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>在启动类<code>NacosConsumerApplication</code> 中增加注解：<code>@EnableFeignClients</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@EnableDiscoveryClient</span><br><span class="hljs-meta">@EnableFeignClients</span><br><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NacosConsumerApplication</span> </span>&#123;<br><br>    <span class="hljs-meta">@LoadBalanced</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> RestTemplate <span class="hljs-title">restTemplate</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RestTemplate();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        SpringApplication.run(NacosConsumerApplication<span class="hljs-class">.<span class="hljs-keyword">class</span>, <span class="hljs-title">args</span>)</span>;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在类：<code>NacosController</code> 中增加方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-meta">@Autowired</span><br><span class="hljs-keyword">private</span> NacosProviderClient nacosProviderClient;<br><br><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/feign-test/&#123;str&#125;"</span>)<br><span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">feignTest</span><span class="hljs-params">(@PathVariable String str)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> nacosProviderClient.echo2(str);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="测试："><a href="#测试：" class="headerlink" title="测试："></a>测试：</h3><ol>
+<li>依次启动两个服务；</li>
+<li>浏览器输入：<a href="http://127.0.0.1:16011/nacos/feign-test/hello" target="_blank" rel="noopener">http://127.0.0.1:16011/nacos/feign-test/hello</a></li>
+<li>返回：Hello feign hello  就表示成功了</li>
+</ol>
+<h2 id="使用Ribbon"><a href="#使用Ribbon" class="headerlink" title="使用Ribbon"></a>使用Ribbon</h2><p>Feign内置了ribbon用于服务的负载均衡，所以只需要引入feign的依赖就会自动使用负载均衡，接下来我们试一下服务的负载均衡：</p>
+<h3 id="spring-cloud-nacos-provider-修改：-1"><a href="#spring-cloud-nacos-provider-修改：-1" class="headerlink" title="spring-cloud-nacos-provider 修改："></a>spring-cloud-nacos-provider 修改：</h3><p><code>NacosController</code> 新增方法和参数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;server.port&#125;"</span>)<br>  String port;<br><br><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/ribbon-test"</span>)<br>  <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">ribbonTest</span><span class="hljs-params">()</span> </span>&#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-string">"Hello ribbon , my port: "</span> + port;<br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>NacosProviderClient</code> 新增接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/nacos/ribbon-test"</span>)<br>  <span class="hljs-function">String <span class="hljs-title">ribbonTest</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>为了测试服务的负载，所以provider服务不使用配置中心的配置，删除配置中心的配置，然后新建<code>application.yml</code> 配置文件，内容如下:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">server:</span><br>  <span class="hljs-attr">port:</span> <span class="hljs-number">16012</span><br><br><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">cloud:</span><br>    <span class="hljs-attr">nacos:</span><br>      <span class="hljs-attr">discovery:</span><br>        <span class="hljs-attr">server-addr:</span> <span class="hljs-number">118.25</span><span class="hljs-number">.36</span><span class="hljs-number">.41</span><span class="hljs-string">:8848</span><br><br><span class="hljs-attr">test:</span><br>  <span class="hljs-attr">config:</span><br>    <span class="hljs-attr">refresh:</span> <span class="hljs-literal">false</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="spring-cloud-nacos-consumer-修改"><a href="#spring-cloud-nacos-consumer-修改" class="headerlink" title="spring-cloud-nacos-consumer 修改"></a>spring-cloud-nacos-consumer 修改</h3><p><code>NacosController</code> 新增方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/ribbon-test"</span>)<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">ribbonTest1</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> nacosProviderClient.ribbonTest();<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="测试：-1"><a href="#测试：-1" class="headerlink" title="测试："></a>测试：</h3><p>在测试之前需要修改idea的配置，红色方框处勾选之后服务可以启动多个节点</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046456754692.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>依次启动两个服务，然后修改<code>spring-cloud-nacos-provider</code> 的端口配置</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">server:</span><br>  <span class="hljs-attr">port:</span> <span class="hljs-number">16013</span><br></code></pre></td></tr></table></figure>
+
+<p>然后再次启动<code>spring-cloud-nacos-provider</code> 服务，启动后该服务存在两个节点</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046456920605.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>然后调用：<a href="http://127.0.0.1:16011/nacos/ribbon-test" target="_blank" rel="noopener">http://127.0.0.1:16011/nacos/ribbon-test</a></p>
+<p>可以发现请求会轮流调用：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">Hello</span> <span class="hljs-string">ribbon</span> <span class="hljs-string">,</span> <span class="hljs-attr">my port:</span> <span class="hljs-number">16012</span><br><span class="hljs-string">Hello</span> <span class="hljs-string">ribbon</span> <span class="hljs-string">,</span> <span class="hljs-attr">my port:</span> <span class="hljs-number">16013</span><br></code></pre></td></tr></table></figure>
+
+<p>这样就实现了服务的负载均衡。</p>
+<h3 id="Ribbon的配置"><a href="#Ribbon的配置" class="headerlink" title="Ribbon的配置"></a>Ribbon的配置</h3><p>可以配置Ribbon的一些参数实现更多的控制，简单的介绍一下Ribbon的配置，我们可以在consumer工程的配置文件中增加：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">feign:</span><br>  <span class="hljs-attr">client:</span><br>    <span class="hljs-attr">config:</span><br>      <span class="hljs-attr">winter-nacos-consumer:</span><br>        <span class="hljs-attr">connectTimeout:</span> <span class="hljs-number">12000000</span><br>        <span class="hljs-attr">readTimeout:</span> <span class="hljs-number">12000000</span><br>        <span class="hljs-attr">NFLoadBalancerRuleClassName:</span> <span class="hljs-string">com.netflix.loadbalancer.RandomRule</span><br>        <span class="hljs-attr">OkToRetryOnAllOperations:</span> <span class="hljs-literal">true</span><br>        <span class="hljs-attr">MaxAutoRetriesNextServer:</span> <span class="hljs-number">2</span><br>        <span class="hljs-attr">MaxAutoRetries:</span> <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs plain">    ConnectTimeout: #单位ms,请求连接超时时间<br>    ReadTimeout:  #单位ms,请求处理的超时时间<br>    OkToRetryOnAllOperations: #对所有操作请求都进行重试<br>    MaxAutoRetriesNextServer: #切换实例的重试次数<br>    MaxAutoRetries: #对当前实例的重试次数<br>NFLoadBalancerRuleClassName #配置Ribbon负载均衡规则:IRule<br></code></pre></td></tr></table></figure>
+
+<h2 id="Hystrix-使用"><a href="#Hystrix-使用" class="headerlink" title="Hystrix 使用"></a>Hystrix 使用</h2><p>除了上面提到的<code>Ribbon</code>，<code>Feign</code>还集成了<code>Hystrix</code> 作为服务熔断组件，服务为什么需要熔断呢？是因为一旦下层服务超时或异常导致不可用，没有熔断机制会导致整个服务集群宕机，所以在微服务架构中，服务的熔断是非常重要的。</p>
+<h3 id="spring-cloud-nacos-provider-修改：-2"><a href="#spring-cloud-nacos-provider-修改：-2" class="headerlink" title="spring-cloud-nacos-provider 修改："></a>spring-cloud-nacos-provider 修改：</h3><p><code>NacosController</code> 新增方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/hystrix-test"</span>)<br>  <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">hystrixTest</span><span class="hljs-params">()</span> </span>&#123;<br>      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"ex"</span>);<br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<p>新增类<code>NacosProviderClientFallback</code> 并实现接口<code>NacosProviderClient</code> ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NacosProviderClientFallback</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">NacosProviderClient</span></span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">echo2</span><span class="hljs-params">(String string)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"error"</span>;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">ribbonTest</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"error"</span>;<br>    &#125;<br><br>    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/hystrix-test"</span>)<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">hystrixTest</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"hystrix error"</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>修改<code>NacosProviderClient</code> ，新增方法并且<code>@FeignClient</code> 注解增加<code>fallback</code>  参数，该参数就是服务降级的类，当服务不可用会调用此类的实现方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FeignClient</span>(value = <span class="hljs-string">"winter-nacos-provider"</span>, fallback = NacosProviderClientFallback<span class="hljs-class">.<span class="hljs-keyword">class</span>)</span><br><span class="hljs-class"><span class="hljs-title">public</span> <span class="hljs-title">interface</span> <span class="hljs-title">NacosProviderClient</span> </span>&#123;<br><br>    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/nacos/feign-test/&#123;string&#125;"</span>)<br>    <span class="hljs-function">String <span class="hljs-title">echo2</span><span class="hljs-params">(@PathVariable String string)</span></span>;<br><br>    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/nacos/ribbon-test"</span>)<br>    <span class="hljs-function">String <span class="hljs-title">ribbonTest</span><span class="hljs-params">()</span></span>;<br><br>    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/nacos/hystrix-test"</span>)<br>    <span class="hljs-function">String <span class="hljs-title">hystrixTest</span><span class="hljs-params">()</span></span>;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="spring-cloud-nacos-consumer-修改-1"><a href="#spring-cloud-nacos-consumer-修改-1" class="headerlink" title="spring-cloud-nacos-consumer 修改"></a>spring-cloud-nacos-consumer 修改</h3><p>增加配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">feign:</span><br>  <span class="hljs-attr">client:</span><br>    <span class="hljs-attr">config:</span><br>      <span class="hljs-attr">winter-nacos-consumer:</span><br>        <span class="hljs-attr">connectTimeout:</span> <span class="hljs-number">12000000</span><br>        <span class="hljs-attr">readTimeout:</span> <span class="hljs-number">12000000</span><br>        <span class="hljs-attr">NFLoadBalancerRuleClassName:</span> <span class="hljs-string">com.netflix.loadbalancer.RandomRule</span><br>        <span class="hljs-attr">OkToRetryOnAllOperations:</span> <span class="hljs-literal">true</span><br>        <span class="hljs-attr">MaxAutoRetriesNextServer:</span> <span class="hljs-number">2</span><br>        <span class="hljs-attr">MaxAutoRetries:</span> <span class="hljs-number">1</span><br>  <span class="hljs-attr">hystrix:</span><br>    <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span> <span class="hljs-comment">#启用hystrix</span><br><br><span class="hljs-attr">hystrix:</span><br>  <span class="hljs-attr">command:</span><br>    <span class="hljs-attr">default:</span><br>      <span class="hljs-attr">execution:</span><br>        <span class="hljs-attr">isolation:</span><br>          <span class="hljs-attr">thread:</span><br>            <span class="hljs-attr">timeoutInMilliseconds:</span> <span class="hljs-number">20000</span> <span class="hljs-comment">#默认的超时时间</span><br>    <span class="hljs-attr">winter-nacos-consumer:</span><br>      <span class="hljs-attr">execution:</span><br>        <span class="hljs-attr">isolation:</span><br>          <span class="hljs-attr">thread:</span><br>            <span class="hljs-attr">timeoutInMilliseconds:</span> <span class="hljs-number">20000</span> <span class="hljs-comment">#当前服务的超时时间，可以不写</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注释的注解都是新增的，如果要特定某个服务的配置，就不写default，直接指定服务名就可以，如上面的配置。</p>
+</blockquote>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>分别启动两个服务，然后调用：<a href="http://127.0.0.1:16011/nacos/hystrix-test" target="_blank" rel="noopener">http://127.0.0.1:16011/nacos/hystrix-test</a></p>
+<p>返回的响应：<code>hystrix error</code> </p>
+<h3 id="拓展：hystrix的配置"><a href="#拓展：hystrix的配置" class="headerlink" title="拓展：hystrix的配置"></a>拓展：hystrix的配置</h3><p>线程池配置<br>| Name                                                             | 备注                                                | 默认值   |<br>|——————————————————————|—————————————————|——-|<br>| hystrix.threadpool.default.coreSize                              | 线程池大小                                             | 10    |<br>| hystrix.threadpool.default.maximumSize                           | 线程池最大大小                                           | 10    |<br>| hystrix.threadpool.default.allowMaximumSizeToDivergeFromCoreSize | 是否允许动态调整线程数量，默认false，只有设置为true了，上面的maximumSize才有效 | FALSE |<br>| hystrix.threadpool.default.keepAliveTimeMinutes                  | 超出coreSize的线程，空闲1分钟后释放掉                           | 1     |<br>| hystrix.threadpool.default.maxQueueSize                          | 不能动态修改                                            | -1    |<br>| hystrix.threadpool.default.queueSizeRejectionThreshold           | 可以动态修改，默认是5，先进入请求队列，然后再由线程池执行                     | 5     |</p>
+<p><strong>如何计算线程池数量？</strong></p>
+<p><strong>高峰期每秒的请求数量 / 1000毫秒 / TP99请求延时 + buffer空间</strong></p>
+<p>比如说处理一个请求，要50ms，那么TP99，也就是99%的请求里处理一个请求耗时最长是50ms。</p>
+<p>我们给一点缓冲空间10ms，那就是处理请求接口耗时60ms。</p>
+<p>所以一秒钟一个线程可以处理：1000 / 60 = 16，一个线程一秒钟可以处理16个请求。</p>
+<p>假设高峰期，每秒最多1200个请求，一个线程每秒可以处理16个请求，需要多少个线程才能处理每秒1200个请求呢？1200 / 16 = 75，最多需要75个线程，每个线程每秒处理16个请求，75个线程每秒才可以处理1200个请求。</p>
+<p>最多需要多少个线程数量，就是这样子算出来</p>
+<p><strong>如果是服务B -&gt; 服务A的话，服务B线程数量怎么设置？</strong></p>
+<p>服务B调用服务A的线程池需要多少个线程呢？</p>
+<p>高峰期，服务B最多要调用服务A每秒钟1200次，服务A处理一个请求是60ms，服务B每次调用服务A的时候，用一个线程发起一次请求，那么这个服务B的这个线程，要60ms才能返回。</p>
+<p>服务B而言，一个线程对服务A发起一次请求需要60ms，一个线程每秒钟可以请求服务A达到16次，但是现在服务B每秒钟需要请求服务A达到1200次，那么服务B就需要75个线程，在高峰期并发请求服务A，才可以完成每秒1200次的调用。</p>
+<p>服务B，部署多台机器，每台机器调用服务A的线程池有10个线程，比如说搞个10个线程，一共部署10台机器，那么服务B调用服务A的线程数量，一共有100个线程，轻轻松松可以支撑高峰期调用服务A的1200次的场景</p>
+<p>每个线程调用服务A一次，耗时60ms，每个线程每秒可以调用服务A一共是16次，100个线程，每秒最多可以调用服务A是1600次，高峰的时候只要支持调用服务A的1200次就可以了，所以这个机器部署就绰绰有余了</p>
+<p>执行配置<br>| Name                                                                        | 备注                             | 默认值    |<br>|—————————————————————————–|——————————–|——–|<br>| hystrix.command.default.execution.isolation.strategy                        | 隔离策略，默认Thread，可以选择Semaphore信号量 | Thread |<br>| hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds    | 超时时间                           | 1000ms |<br>| hystrix.command.default.execution.timeout.enabled                           | 是否启用超时                         | TRUE   |<br>| hystrix.command.default.execution.isolation.thread.interruptOnTimeout       | 超时的时候是否中断执行                    | TRUE   |<br>| hystrix.command.default.execution.isolation.semaphore.maxConcurrentRequests | 信号量隔离策略下，允许的最大并发请求数量           | 10     |</p>
+<p>降级配置<br>| Name                                     | 备注     | 默认值  |<br>|——————————————|——–|——|<br>| hystrix.command.default.fallback.enabled | 是否启用降级 | TRUE |</p>
+<p>熔断配置<br>| Name                                                             | 备注                                              | 默认值  |<br>|——————————————————————|————————————————-|——|<br>| hystrix.command.default.circuitBreaker.enabled                   | 是否启用熔断器                                         | TRUE |<br>| hystrix.command.default.circuitBreaker.requestVolumeThreshold    | 10秒钟内，请求数量达到多少才能去尝试触发熔断                         | 20   |<br>| hystrix.command.default.circuitBreaker.errorThresholdPercentage  | 10秒钟内，请求数量达到20，同时异常比例达到50%，就会触发熔断               | 50   |<br>| hystrix.command.default.circuitBreaker.sleepWindowInMilliseconds | 触发熔断之后，5s内直接拒绝请求，走降级逻辑，5s后尝试half-open放过少量流量试着恢复 | 5000 |<br>| hystrix.command.default.circuitBreaker.forceOpen                 | 强制打开熔断器                                         |      |<br>| hystrix.command.default.circuitBreaker.forceClosed               | 强制关闭熔断器                                         |      |</p>
+<p>监控配置<br>| Name                                                                  | 备注                                                                                                                                                        | 默认值           |<br>|———————————————————————–|———————————————————————————————————————————————————–|—————|<br>| hystrix.threadpool.default.metrics.rollingStats.timeInMillisecond     | 线程池统计指标的时间                                                                                                                                                | 默认10000，就是10s |<br>| hystrix.threadpool.default.metrics.rollingStats.numBuckets            | 将rolling window划分为n个buckets                                                                                                                               | 10            |<br>| hystrix.command.default.metrics.rollingStats.timeInMilliseconds       | command的统计时间，熔断器是否打开会根据1个rolling window的统计来计算。若rolling window被设为10000毫秒，则rolling window会被分成n个buckets，每个bucket包含success，failure，timeout，rejection的次数的统计信息。 | 10000         |<br>| hystrix.command.default.metrics.rollingStats.numBuckets               | 设置一个rolling window被划分的数量，若numBuckets＝10，rolling window＝10000，那么一个bucket的时间即1秒。必须符合rolling window % numberBuckets == 0                                     | 10            |<br>| hystrix.command.default.metrics.rollingPercentile.enabled             |  执行时是否enable指标的计算和跟踪                                                                                                                                      | TRUE          |<br>| hystrix.command.default.metrics.rollingPercentile.timeInMilliseconds  | 设置rolling percentile window的时间                                                                                                                            | 60000         |<br>| hystrix.command.default.metrics.rollingPercentile.numBuckets          | 设置rolling percentile window的numberBuckets。逻辑同上。                                                                                                           | 6             |<br>| hystrix.command.default.metrics.rollingPercentile.bucketSize          | 如果bucket size＝100，window＝10s，若这10s里有500次执行，只有最后100次执行会被统计到bucket里去。增加该值会增加内存开销以及排序的开销。                                                                    | 100           |<br>| hystrix.command.default.metrics.healthSnapshot.intervalInMilliseconds | 记录health 快照（用来统计成功和错误绿）的间隔                                                                                                                                | 500ms         |</p>
+<p>高阶特性配置<br>| Name                                               | 备注                                                               | 默认值               |<br>|—————————————————-|——————————————————————|——————-|<br>| hystrix.command.default.requestCache.enabled       | 是否启用请求缓存                                                         | TRUE              |<br>| hystrix.command.default.requestLog.enabled         | 记录日志到HystrixRequestLog                                           | TRUE              |<br>| hystrix.collapser.default.maxRequestsInBatch       | 单次批处理的最大请求数，达到该数量触发批处理                                           | Integer.MAX_VALUE |<br>| hystrix.collapser.default.timerDelayInMilliseconds | 触发批处理的延迟，也可以为创建批处理的时间＋该值                                         | 10                |<br>| hystrix.collapser.default.requestCache.enabled     | 是否对HystrixCollapser.execute() and HystrixCollapser.queue()的cache | TRUE              |</p>
+<p><strong>Feign和Hystrix结合的原理</strong></p>
+<p>Feign在和Hystrix整合的时候，feign动态代理里面有一些Hystrix相关的代码，请求走feign动态代理的时候，就会基于Hystrix Command发送请求，实现服务间调用的隔离、限流、超时、降级、熔断、统计等。</p>
+<p><img    class="lazyload" data-original="http://www.saily.top/img/spring-cloud/Feign%E5%92%8CHystrix%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">http://www.saily.top/img/spring-cloud/Feign%E5%92%8CHystrix%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86.jpg</span></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文学习了springcloud整合feign实现远程服务调用，并且使用了feign集成的Ribbon和Hystrix实现的负载均衡和服务熔断，以及对服务负载均衡和熔断进行了深度的了解和实际使用当中的一些配置，下一篇将会讲讲微服务网关SpringCloud Gateway。</p>
+<h2 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h2><p><a href="https://github.com/WinterChenS/spring-cloud-hoxton-study" target="_blank" rel="noopener">https://github.com/WinterChenS/spring-cloud-hoxton-study</a></p>
+<p>参考文档：</p>
+<p><a href="https://spring.io/projects/spring-cloud-openfeign" target="_blank" rel="noopener">Spring Cloud OpenFeign</a></p>
+<p><a href="http://www.saily.top/2020/04/19/springcloud/hystrix05/" target="_blank" rel="noopener">Feign和Hystrix的结合使用</a></p>
+
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>winter chen</li>
+    <li><strong>本文链接：</strong><a href="https://blog.winterchen.com/2021/08/02/2021-08-02-spring-cloud-hoxton-3-feign/index.html" title="https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2021&#x2F;08&#x2F;02&#x2F;2021-08-02-spring-cloud-hoxton-3-feign&#x2F;index.html">https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2021&#x2F;08&#x2F;02&#x2F;2021-08-02-spring-cloud-hoxton-3-feign&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hoxton/" rel="tag">Hoxton</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/feign/" rel="tag">feign</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a href="/2021/08/03/2021-08-03-spring-cloud-hoxton-4-gateway/"><i class="iconfont iconleft"></i>SpringCloud系列教程(四)之SpringCloud Gateway</a>
+    <a href="/2021/08/01/2021-08-01-spring-cloud-hoxton-2-nacos/">SpringCloud系列教程(二)之Nacos<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+    <div class="btn" id="comments-btn">查看评论</div>
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk" class="gitalk"></div>
+<script defer src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  window.onload = function () {
+    var gitalk = new Gitalk({
+      clientID: '77f2adc33e0112d086d7',
+      clientSecret: 'e926aa3a621556609b2c2b76d89320fa524e23cd',
+      id: window.location.pathname,
+      repo: 'WinterChenS.github.io',
+      owner: 'WinterChenS',
+      admin: 'WinterChenS'
+    });
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        gitalk.render('gitalk');
+      });
+    } else {
+      gitalk.render('gitalk');
+    }
+  }
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前情概要"><span class="toc-text">前情概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本文概览"><span class="toc-text">本文概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是RPC？"><span class="toc-text">什么是RPC？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#feign的原理："><span class="toc-text">feign的原理：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Cloud集成feign"><span class="toc-text">Spring Cloud集成feign</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#spring-cloud-nacos-provider-修改："><span class="toc-text">spring-cloud-nacos-provider 修改：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spring-cloud-nacos-consumer-修改："><span class="toc-text">spring-cloud-nacos-consumer 修改：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试："><span class="toc-text">测试：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Ribbon"><span class="toc-text">使用Ribbon</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#spring-cloud-nacos-provider-修改：-1"><span class="toc-text">spring-cloud-nacos-provider 修改：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spring-cloud-nacos-consumer-修改"><span class="toc-text">spring-cloud-nacos-consumer 修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试：-1"><span class="toc-text">测试：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ribbon的配置"><span class="toc-text">Ribbon的配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hystrix-使用"><span class="toc-text">Hystrix 使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#spring-cloud-nacos-provider-修改：-2"><span class="toc-text">spring-cloud-nacos-provider 修改：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spring-cloud-nacos-consumer-修改-1"><span class="toc-text">spring-cloud-nacos-consumer 修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拓展：hystrix的配置"><span class="toc-text">拓展：hystrix的配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码地址"><span class="toc-text">源码地址</span></a></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="https://github.com/winterchens "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:i@winterchen.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+    <div class="search">
+  <div class="search-container">
+    <div class="search-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <div class="search-input-wrapper">
+      <i class="search-input-icon iconfont iconsearch"></i>
+      <input class="search-input" type="search" id="search-input" placeholder="Search..." autofocus autocomplete="off"
+        autocorrect="off" autocapitalize="off">
+    </div>
+    <div class="search-output" id="search-output"></div>
+  </div>
+</div>
+  
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <script>
+    window.ga = window.ga || function () {
+      (ga.q = ga.q || []).push(arguments)
+    };
+    ga.l = +new Date;
+    ga('create', 'UA-155319408-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script defer src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script>
+    var _mtac = {};
+    (function () {
+      var mta = document.createElement("script");
+      mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "500722607");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+
+
+
+</html>

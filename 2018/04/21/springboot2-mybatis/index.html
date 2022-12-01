@@ -1,0 +1,513 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-Hans" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>springboot2.0 Mybatis 整合 (springboot2.0版本) - Luis Blog</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content="java,spring,springboot,springcloud,mybatis,jQuery,html,css, springboot,mybatis.java">
+  <meta name="description" content="
+
+springboot终于迎来了2.0版本，很多新的...">
+  <meta name="author" content="winter chen">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xt256.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: '',
+        wechat: ''
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://gitee.com/winter_chen/img/raw/master/blog/20210413131918.jpeg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: true,
+        path: '/search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+        <i class="iconfont iconsearch j-navbar-search"></i>
+      
+    </div>
+    <div class="center">springboot2.0 Mybatis 整合 (springboot2.0版本)</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="https://www.winterchen.com " target="_blank" rel="noopener" class="underline "> 主页</a>
+      </li><li class="menu-item">
+        <a href="/ " class="underline "> 博客首页</a>
+      </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 摄影</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046782543036.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">springboot2.0 Mybatis 整合 (springboot2.0版本)</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>April 21, 2018</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>18106</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+          <p><p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046782791380.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<blockquote>
+<p>springboot终于迎来了2.0版本，很多新的特性让springboot更加强大，之前<a href="https://blog.csdn.net/winter_chen001/article/details/77249029" target="_blank" rel="noopener">使用1.5.6版本整合了Mybatis</a>，现在2.0版本就已经不适用了，所以，在摸索中搭建了2.0版本整合Mybatis</p>
+</blockquote></p>
+        
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>本来这篇博文老在就写好了，但是后来发现很多功能其实根本就没有检验通过就发出来了，导致遗留了很多坑，比如最难搞的就是SqlSessionFactory和PageHelper，之前写过关于springboot1.5.6版本的整合，这段时间刚好springboot发布了2.0的正式版本，很多同学可能没有注意版本，导致了整合的时候出现了很多很多的问题，这几天刚好有空就试着整合一下springboot2.0 mybatis，发现了很多很多的坑，而且网上的资源也不多，终于在两天的踩坑中成功整合了，并且将翻页功能修复好了，废话不多说了，看代码：</p>
+<h2 id="环境-版本一览："><a href="#环境-版本一览：" class="headerlink" title="环境/版本一览："></a>环境/版本一览：</h2><ul>
+<li>开发工具：Intellij IDEA 2017.1.3</li>
+<li>springboot: <strong>2.0.1.RELEASE</strong></li>
+<li>jdk：1.8.0_40</li>
+<li>maven:3.3.9</li>
+<li>alibaba Druid 数据库连接池：1.1.0</li>
+</ul>
+<h3 id="额外功能："><a href="#额外功能：" class="headerlink" title="额外功能："></a>额外功能：</h3><ul>
+<li>PageHelper 分页插件</li>
+<li>mybatis generator 自动生成代码插件（本次搭建就不讲解了，请参照<a href="https://blog.csdn.net/winter_chen001/article/details/77249029" target="_blank" rel="noopener">Spring boot Mybatis 整合（完整版）</a>）</li>
+</ul>
+<h2 id="开始搭建："><a href="#开始搭建：" class="headerlink" title="开始搭建："></a>开始搭建：</h2><h3 id="创建项目："><a href="#创建项目：" class="headerlink" title="创建项目："></a>创建项目：</h3><p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046466648928.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046466698922.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>添加基础的依赖：<br><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046466739962.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<h3 id="依赖文件："><a href="#依赖文件：" class="headerlink" title="依赖文件："></a>依赖文件：</h3><p>按照pom文件补齐需要的依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">project</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">"http://maven.apache.org/POM/4.0.0"</span> <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="hljs-tag">	<span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">modelVersion</span>&gt;</span>4.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">modelVersion</span>&gt;</span><br><br>	<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.winterchen<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>springboot2-mybatis-demo<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>0.0.1-SNAPSHOT<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">packaging</span>&gt;</span>jar<span class="hljs-tag">&lt;/<span class="hljs-name">packaging</span>&gt;</span><br><br>	<span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>springboot2-mybatis-demo<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">description</span>&gt;</span>Demo project for Spring Boot<span class="hljs-tag">&lt;/<span class="hljs-name">description</span>&gt;</span><br><br>	<span class="hljs-tag">&lt;<span class="hljs-name">parent</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.0.1.RELEASE<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">relativePath</span>/&gt;</span> <span class="hljs-comment">&lt;!-- lookup parent from repository --&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">parent</span>&gt;</span><br><br>	<span class="hljs-tag">&lt;<span class="hljs-name">properties</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="hljs-tag">&lt;/<span class="hljs-name">project.build.sourceEncoding</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">project.reporting.outputEncoding</span>&gt;</span>UTF-8<span class="hljs-tag">&lt;/<span class="hljs-name">project.reporting.outputEncoding</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">java.version</span>&gt;</span>1.8<span class="hljs-tag">&lt;/<span class="hljs-name">java.version</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">properties</span>&gt;</span><br><br>	<span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.3.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>mysql<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mysql-connector-java<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>runtime<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.commons<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>commons-lang3<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.4<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jackson-core<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jackson-databind<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.fasterxml.jackson.datatype<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jackson-datatype-joda<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.fasterxml.jackson.module<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jackson-module-parameter-names<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- 分页插件 --&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.github.pagehelper<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>pagehelper<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>5.1.3<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- alibaba的druid数据库连接池 --&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>druid-spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.1.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br><br>	<span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span><br>			<span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span><br>				<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>				<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>			<span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br>		<span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span><br><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">project</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="项目结构："><a href="#项目结构：" class="headerlink" title="项目结构："></a>项目结构：</h3><p><img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046466825127.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">项目结构</span></p>
+<h4 id="项目启动类："><a href="#项目启动类：" class="headerlink" title="项目启动类："></a>项目启动类：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen;<br><br><span class="hljs-keyword">import</span> org.springframework.boot.SpringApplication;<br><span class="hljs-keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;<br><br><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Springboot2MybatisDemoApplication</span> </span>&#123;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		SpringApplication.run(Springboot2MybatisDemoApplication<span class="hljs-class">.<span class="hljs-keyword">class</span>, <span class="hljs-title">args</span>)</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="配置："><a href="#配置：" class="headerlink" title="配置："></a>配置：</h3><blockquote>
+<p>可以根据个人使用习惯选择使用<code>properties</code>或者<code>yml</code>文件，本项目使用的是yml配置文件，所以把原本<code>application.properties</code>删除，创建一个<code>application.yml</code>文件</p>
+</blockquote>
+<p>在resource文件夹下创建<code>application.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">server:</span><br>  <span class="hljs-attr">port:</span> <span class="hljs-number">8080</span><br><br><br><span class="hljs-attr">spring:</span><br>    <span class="hljs-attr">datasource:</span><br>        <span class="hljs-attr">name:</span> <span class="hljs-string">test</span><br>        <span class="hljs-attr">url:</span> <span class="hljs-string">jdbc:mysql://127.0.0.1:3306/mytest?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true</span><br>        <span class="hljs-attr">username:</span> <span class="hljs-string">root</span><br>        <span class="hljs-attr">password:</span> <span class="hljs-string">root</span><br>        <span class="hljs-comment"># 使用druid数据源</span><br>        <span class="hljs-attr">type:</span> <span class="hljs-string">com.alibaba.druid.pool.DruidDataSource</span><br>        <span class="hljs-attr">driver-class-name:</span> <span class="hljs-string">com.mysql.jdbc.Driver</span><br>        <span class="hljs-attr">filters:</span> <span class="hljs-string">stat</span><br>        <span class="hljs-attr">maxActive:</span> <span class="hljs-number">20</span><br>        <span class="hljs-attr">initialSize:</span> <span class="hljs-number">1</span><br>        <span class="hljs-attr">maxWait:</span> <span class="hljs-number">60000</span><br>        <span class="hljs-attr">minIdle:</span> <span class="hljs-number">1</span><br>        <span class="hljs-attr">timeBetweenEvictionRunsMillis:</span> <span class="hljs-number">60000</span><br>        <span class="hljs-attr">minEvictableIdleTimeMillis:</span> <span class="hljs-number">300000</span><br>        <span class="hljs-attr">validationQuery:</span> <span class="hljs-string">select</span> <span class="hljs-string">'x'</span><br>        <span class="hljs-attr">testWhileIdle:</span> <span class="hljs-literal">true</span><br>        <span class="hljs-attr">testOnBorrow:</span> <span class="hljs-literal">false</span><br>        <span class="hljs-attr">testOnReturn:</span> <span class="hljs-literal">false</span><br>        <span class="hljs-attr">poolPreparedStatements:</span> <span class="hljs-literal">true</span><br>        <span class="hljs-attr">maxPoolPreparedStatementPerConnectionSize:</span> <span class="hljs-number">20</span><br>        <span class="hljs-attr">maxOpenPreparedStatements:</span> <span class="hljs-number">20</span><br>        <br><span class="hljs-attr">mybatis:</span><br>  <span class="hljs-attr">mapper-locations:</span> <span class="hljs-string">classpath:mapper/*.xml</span><br>  <span class="hljs-attr">type-aliases-package:</span> <span class="hljs-string">com.winterchen.model</span><br><br><span class="hljs-attr">mapper:</span><br>  <span class="hljs-attr">mappers:</span>  <span class="hljs-string">com.winterchen.dao</span><br>  <span class="hljs-attr">not-empty:</span> <span class="hljs-literal">false</span><br>  <span class="hljs-attr">identity:</span> <span class="hljs-string">MYSQL</span><br><br><span class="hljs-comment">#pagehelper</span><br><span class="hljs-attr">pagehelper:</span><br>    <span class="hljs-attr">helperDialect:</span> <span class="hljs-string">mysql</span><br>    <span class="hljs-attr">reasonable:</span> <span class="hljs-literal">true</span><br>    <span class="hljs-attr">supportMethodsArguments:</span> <span class="hljs-literal">true</span><br>    <span class="hljs-attr">params:</span> <span class="hljs-string">count=countSql</span><br>    <span class="hljs-attr">returnPageInfo:</span> <span class="hljs-string">check</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="创建包："><a href="#创建包：" class="headerlink" title="创建包："></a>创建包：</h3><p><code>model</code>，<code>dao</code>，<code>mapper</code>,<code>config</code></p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046466881978.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<h3 id="新建配置类："><a href="#新建配置类：" class="headerlink" title="新建配置类："></a>新建配置类：</h3><p><code>PageHelperConfig.java</code></p>
+<blockquote>
+<p>以下配置非常的重要，<code>PageHelper</code>的Page拦截器<code>PageInterceptor</code>，如果不进行配置，那么分页功能将没有效果</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen.config;<br><br><span class="hljs-keyword">import</span> com.github.pagehelper.PageInterceptor;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Value;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Bean;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Configuration;<br><br><span class="hljs-keyword">import</span> java.util.Properties;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 分页插件的配置</span><br><span class="hljs-comment"> * Created by Donghua.Chen on 2018/4/20.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PageHelperConfig</span> </span>&#123;<br><br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;pagehelper.helperDialect&#125;"</span>)<br>    <span class="hljs-keyword">private</span> String helperDialect;<br>    <br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> PageInterceptor <span class="hljs-title">pageInterceptor</span><span class="hljs-params">()</span></span>&#123;<br>        PageInterceptor pageInterceptor = <span class="hljs-keyword">new</span> PageInterceptor();<br>        Properties properties = <span class="hljs-keyword">new</span> Properties();<br>        properties.setProperty(<span class="hljs-string">"helperDialect"</span>, helperDialect);<br>        pageInterceptor.setProperties(properties);<br>        <span class="hljs-keyword">return</span> pageInterceptor;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<p><code>DataSourceConfig.java</code></p>
+<blockquote>
+<p>在springboot2.0版本，如果不定义<code>SqlSessionFactory</code>，那么将会导致错误，因为无法注入<code>SqlSessionFactory</code>，<strong>并且下面注释部分的内容非常的重要，这也是整合当中遇到的很大的坑，如果不将PageInterceptor作为插件设置到SqlSessionFactoryBean中，导致分页失效</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen.config;<br><br><span class="hljs-keyword">import</span> com.github.pagehelper.PageHelper;<br><span class="hljs-keyword">import</span> com.github.pagehelper.PageInterceptor;<br><span class="hljs-keyword">import</span> org.apache.ibatis.plugin.Interceptor;<br><span class="hljs-keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;<br><span class="hljs-keyword">import</span> org.mybatis.spring.SqlSessionFactoryBean;<br><span class="hljs-keyword">import</span> org.mybatis.spring.annotation.MapperScan;<br><span class="hljs-keyword">import</span> org.slf4j.Logger;<br><span class="hljs-keyword">import</span> org.slf4j.LoggerFactory;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Qualifier;<br><span class="hljs-keyword">import</span> org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;<br><span class="hljs-keyword">import</span> org.springframework.boot.context.properties.ConfigurationProperties;<br><span class="hljs-keyword">import</span> org.springframework.boot.jdbc.DataSourceBuilder;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Bean;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Configuration;<br><span class="hljs-keyword">import</span> org.springframework.core.env.Environment;<br><span class="hljs-keyword">import</span> org.springframework.core.io.support.PathMatchingResourcePatternResolver;<br><span class="hljs-keyword">import</span> org.springframework.transaction.annotation.EnableTransactionManagement;<br><br><span class="hljs-keyword">import</span> javax.sql.DataSource;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 2018/4/19 18:46</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-meta">@MapperScan</span>(<span class="hljs-string">"com.winterchen.dao"</span>)<br><span class="hljs-meta">@EnableTransactionManagement</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DataSourceConfig</span> </span>&#123;<br><br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Logger logger = LoggerFactory.getLogger(DataSourceConfig<span class="hljs-class">.<span class="hljs-keyword">class</span>)</span>;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> Environment env;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> PageInterceptor pageInterceptor;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> SqlSessionFactory <span class="hljs-title">sqlSessionFactory</span><span class="hljs-params">(DataSource dataSource)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        SqlSessionFactoryBean fb = <span class="hljs-keyword">new</span> SqlSessionFactoryBean();<br>        fb.setDataSource(dataSource);<br>        <span class="hljs-comment">//该配置非常的重要，如果不将PageInterceptor设置到SqlSessionFactoryBean中，导致分页失效</span><br>        fb.setPlugins(<span class="hljs-keyword">new</span> Interceptor[]&#123;pageInterceptor&#125;);<br>        fb.setTypeAliasesPackage(env.getProperty(<span class="hljs-string">"mybatis.type-aliases-package"</span>));<br>        fb.setMapperLocations(<span class="hljs-keyword">new</span> PathMatchingResourcePatternResolver().getResources(env.getProperty(<span class="hljs-string">"mybatis.mapper-locations"</span>)));<br>        <span class="hljs-keyword">return</span> fb.getObject();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>DruidDBConfig.java</code></p>
+<blockquote>
+<p>在Spring Boot1.4.0中驱动配置信息没有问题，但是连接池的配置信息不再支持这里的配置项，即无法通过配置项直接支持相应的连接池；这里列出的这些配置项可以通过定制化DataSource来实现。<br>  目前Spring Boot中默认支持的连接池有dbcp,dbcp2, tomcat, hikari三种连接池。 </p>
+</blockquote>
+<p>由于Druid暂时不在Spring Bootz中的直接支持，故需要进行配置信息的定制：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen.config;<br><br><span class="hljs-keyword">import</span> com.alibaba.druid.pool.DruidDataSource;<br><span class="hljs-keyword">import</span> org.slf4j.Logger;<br><span class="hljs-keyword">import</span> org.slf4j.LoggerFactory;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Value;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Bean;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Configuration;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Primary;<br><br><span class="hljs-keyword">import</span> javax.sql.DataSource;<br><span class="hljs-keyword">import</span> java.sql.SQLException;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Created by Donghua.Chen on 2018/4/19.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DruidDBConfig</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> Logger logger = LoggerFactory.getLogger(DruidDBConfig<span class="hljs-class">.<span class="hljs-keyword">class</span>)</span>;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.url&#125;"</span>)<br>    <span class="hljs-keyword">private</span> String dbUrl;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.username&#125;"</span>)<br>    <span class="hljs-keyword">private</span> String username;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.password&#125;"</span>)<br>    <span class="hljs-keyword">private</span> String password;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.driver-class-name&#125;"</span>)<br>    <span class="hljs-keyword">private</span> String driverClassName;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.initialSize&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> initialSize;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.minIdle&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> minIdle;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.maxActive&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> maxActive;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.maxWait&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> maxWait;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.timeBetweenEvictionRunsMillis&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> timeBetweenEvictionRunsMillis;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.minEvictableIdleTimeMillis&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> minEvictableIdleTimeMillis;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.validationQuery&#125;"</span>)<br>    <span class="hljs-keyword">private</span> String validationQuery;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.testWhileIdle&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> testWhileIdle;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.testOnBorrow&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> testOnBorrow;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.testOnReturn&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> testOnReturn;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.poolPreparedStatements&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> poolPreparedStatements;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.maxPoolPreparedStatementPerConnectionSize&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> maxPoolPreparedStatementPerConnectionSize;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.filters&#125;"</span>)<br>    <span class="hljs-keyword">private</span> String filters;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"&#123;spring.datasource.connectionProperties&#125;"</span>)<br>    <span class="hljs-keyword">private</span> String connectionProperties;<br><br>    <span class="hljs-meta">@Bean</span>     <span class="hljs-comment">//声明其为Bean实例</span><br>    <span class="hljs-meta">@Primary</span>  <span class="hljs-comment">//在同样的DataSource中，首先使用被标注的DataSource</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> DataSource <span class="hljs-title">dataSource</span><span class="hljs-params">()</span></span>&#123;<br>        DruidDataSource datasource = <span class="hljs-keyword">new</span> DruidDataSource();<br><br>        datasource.setUrl(<span class="hljs-keyword">this</span>.dbUrl);<br>        datasource.setUsername(username);<br>        datasource.setPassword(password);<br>        datasource.setDriverClassName(driverClassName);<br><br>        <span class="hljs-comment">//configuration</span><br>        datasource.setInitialSize(initialSize);<br>        datasource.setMinIdle(minIdle);<br>        datasource.setMaxActive(maxActive);<br>        datasource.setMaxWait(maxWait);<br>        datasource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);<br>        datasource.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);<br>        datasource.setValidationQuery(validationQuery);<br>        datasource.setTestWhileIdle(testWhileIdle);<br>        datasource.setTestOnBorrow(testOnBorrow);<br>        datasource.setTestOnReturn(testOnReturn);<br>        datasource.setPoolPreparedStatements(poolPreparedStatements);<br>        datasource.setMaxPoolPreparedStatementPerConnectionSize(maxPoolPreparedStatementPerConnectionSize);<br>        <span class="hljs-keyword">try</span> &#123;<br>            datasource.setFilters(filters);<br>        &#125; <span class="hljs-keyword">catch</span> (SQLException e) &#123;<br>            logger.error(<span class="hljs-string">"druid configuration initialization filter"</span>, e);<br>        &#125;<br>        datasource.setConnectionProperties(connectionProperties);<br><br>        <span class="hljs-keyword">return</span> datasource;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="创建数据库和数据表"><a href="#创建数据库和数据表" class="headerlink" title="创建数据库和数据表"></a>创建数据库和数据表</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">DATABASE</span> mytest;<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> t_user(<br>  userId <span class="hljs-built_in">INT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> PRIMARY <span class="hljs-keyword">KEY</span> AUTO_INCREMENT,<br>  userName <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> ,<br>  <span class="hljs-keyword">password</span> <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> ,<br>  phone <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span><br>) <span class="hljs-keyword">ENGINE</span>=<span class="hljs-keyword">INNODB</span> AUTO_INCREMENT=<span class="hljs-number">1000</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">CHARSET</span>=utf8;<br></code></pre></td></tr></table></figure>
+
+<h3 id="创建实体类：UserDomain-java"><a href="#创建实体类：UserDomain-java" class="headerlink" title="创建实体类：UserDomain.java"></a>创建实体类：<code>UserDomain.java</code></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen.model;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserDomain</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> Integer userId;<br><br>    <span class="hljs-keyword">private</span> String userName;<br><br>    <span class="hljs-keyword">private</span> String password;<br><br>    <span class="hljs-keyword">private</span> String phone;<br><br>    <span class="hljs-comment">// get,set方法略...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h3 id="创建dao："><a href="#创建dao：" class="headerlink" title="创建dao："></a>创建dao：</h3><p><code>UserDao.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen.dao;<br><br><br><br><span class="hljs-keyword">import</span> com.winterchen.model.UserDomain;<br><span class="hljs-keyword">import</span> org.apache.ibatis.annotations.Mapper;<br><br><span class="hljs-keyword">import</span> java.util.List;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">UserDao</span> </span>&#123;<br><br><br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">insert</span><span class="hljs-params">(UserDomain record)</span></span>;<br><br><br><br>    <span class="hljs-function">List&lt;UserDomain&gt; <span class="hljs-title">selectUsers</span><span class="hljs-params">()</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="创建mybatis映射文件：-UserMapper-xml"><a href="#创建mybatis映射文件：-UserMapper-xml" class="headerlink" title="创建mybatis映射文件： UserMapper.xml"></a>创建mybatis映射文件： <code>UserMapper.xml</code></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">mapper</span> <span class="hljs-meta-keyword">PUBLIC</span> <span class="hljs-meta-string">"-//mybatis.org//DTD Mapper 3.0//EN"</span> <span class="hljs-meta-string">"http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span> &gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">mapper</span> <span class="hljs-attr">namespace</span>=<span class="hljs-string">"com.winterchen.dao.UserDao"</span> &gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">sql</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"BASE_TABLE"</span>&gt;</span><br>    t_user<br>  <span class="hljs-tag">&lt;/<span class="hljs-name">sql</span>&gt;</span><br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">sql</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"BASE_COLUMN"</span>&gt;</span><br>    userId,userName,password,phone<br>  <span class="hljs-tag">&lt;/<span class="hljs-name">sql</span>&gt;</span><br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">insert</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"insert"</span> <span class="hljs-attr">parameterType</span>=<span class="hljs-string">"com.winterchen.model.UserDomain"</span>&gt;</span><br>    INSERT INTO<br>      <span class="hljs-tag">&lt;<span class="hljs-name">include</span> <span class="hljs-attr">refid</span>=<span class="hljs-string">"BASE_TABLE"</span>/&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">trim</span> <span class="hljs-attr">prefix</span>=<span class="hljs-string">"("</span> <span class="hljs-attr">suffix</span>=<span class="hljs-string">")"</span> <span class="hljs-attr">suffixOverrides</span>=<span class="hljs-string">","</span>&gt;</span><br>      userName,password,<br>      <span class="hljs-tag">&lt;<span class="hljs-name">if</span> <span class="hljs-attr">test</span>=<span class="hljs-string">"phone != null"</span>&gt;</span><br>        phone,<br>      <span class="hljs-tag">&lt;/<span class="hljs-name">if</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">trim</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">trim</span> <span class="hljs-attr">prefix</span>=<span class="hljs-string">"VALUES("</span> <span class="hljs-attr">suffix</span>=<span class="hljs-string">")"</span> <span class="hljs-attr">suffixOverrides</span>=<span class="hljs-string">","</span>&gt;</span><br>      #&#123;userName, jdbcType=VARCHAR&#125;,#&#123;password, jdbcType=VARCHAR&#125;,<br>      <span class="hljs-tag">&lt;<span class="hljs-name">if</span> <span class="hljs-attr">test</span>=<span class="hljs-string">"phone != null"</span>&gt;</span><br>        #&#123;phone, jdbcType=VARCHAR&#125;,<br>      <span class="hljs-tag">&lt;/<span class="hljs-name">if</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">trim</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">insert</span>&gt;</span><br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"selectUsers"</span> <span class="hljs-attr">resultType</span>=<span class="hljs-string">"com.winterchen.model.UserDomain"</span>&gt;</span><br>      SELECT<br>        <span class="hljs-tag">&lt;<span class="hljs-name">include</span> <span class="hljs-attr">refid</span>=<span class="hljs-string">"BASE_COLUMN"</span>/&gt;</span><br>      FROM<br>        <span class="hljs-tag">&lt;<span class="hljs-name">include</span> <span class="hljs-attr">refid</span>=<span class="hljs-string">"BASE_TABLE"</span>/&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span><br><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">mapper</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="创建剩余的controller，service包和文件"><a href="#创建剩余的controller，service包和文件" class="headerlink" title="创建剩余的controller，service包和文件"></a>创建剩余的<code>controller</code>，<code>service</code>包和文件</h3><p><code>UserService.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen.service.user;<br><br><span class="hljs-keyword">import</span> com.winterchen.model.UserDomain;<br><br><span class="hljs-keyword">import</span> java.util.List;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Created by Administrator on 2018/4/19.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">UserService</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">addUser</span><span class="hljs-params">(UserDomain user)</span></span>;<br><br>    <span class="hljs-function">List&lt;UserDomain&gt; <span class="hljs-title">findAllUser</span><span class="hljs-params">(<span class="hljs-keyword">int</span> pageNum, <span class="hljs-keyword">int</span> pageSize)</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>UserServiceImpl</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen.service.user.impl;<br><br><span class="hljs-keyword">import</span> com.github.pagehelper.PageHelper;<br><span class="hljs-keyword">import</span> com.winterchen.dao.UserDao;<br><span class="hljs-keyword">import</span> com.winterchen.model.UserDomain;<br><span class="hljs-keyword">import</span> com.winterchen.service.user.UserService;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Service;<br><br><span class="hljs-keyword">import</span> java.util.List;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Created by Administrator on 2017/8/16.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Service</span>(value = <span class="hljs-string">"userService"</span>)<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserServiceImpl</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">UserService</span> </span>&#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> UserDao userDao;<span class="hljs-comment">//这里会报错，但是并不会影响</span><br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">addUser</span><span class="hljs-params">(UserDomain user)</span> </span>&#123;<br><br>        <span class="hljs-keyword">return</span> userDao.insert(user);<br>    &#125;<br><br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">    * 这个方法中用到了我们开头配置依赖的分页插件pagehelper</span><br><span class="hljs-comment">    * 很简单，只需要在service层传入参数，然后将参数传递给一个插件的一个静态方法即可；</span><br><span class="hljs-comment">    * pageNum 开始页数</span><br><span class="hljs-comment">    * pageSize 每页显示的数据条数</span><br><span class="hljs-comment">    * */</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> List&lt;UserDomain&gt; <span class="hljs-title">findAllUser</span><span class="hljs-params">(<span class="hljs-keyword">int</span> pageNum, <span class="hljs-keyword">int</span> pageSize)</span> </span>&#123;<br>        <span class="hljs-comment">//将参数传给这个方法就可以实现物理分页了，非常简单。</span><br>        PageHelper.startPage(pageNum, pageSize);<br>        <span class="hljs-keyword">return</span> userDao.selectUsers();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>UserController.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen.controller;<br><br><span class="hljs-keyword">import</span> com.github.pagehelper.PageHelper;<br><span class="hljs-keyword">import</span> com.winterchen.model.UserDomain;<br><span class="hljs-keyword">import</span> com.winterchen.service.user.UserService;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Controller;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.*;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Created by Administrator on 2017/8/16.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Controller</span><br><span class="hljs-meta">@RequestMapping</span>(value = <span class="hljs-string">"/user"</span>)<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserController</span> </span>&#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> UserService userService;<br><br>    <span class="hljs-meta">@ResponseBody</span><br>    <span class="hljs-meta">@PostMapping</span>(<span class="hljs-string">"/add"</span>)<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">addUser</span><span class="hljs-params">(UserDomain user)</span></span>&#123;<br>        <span class="hljs-keyword">return</span> userService.addUser(user);<br>    &#125;<br><br>    <span class="hljs-meta">@ResponseBody</span><br>    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/all"</span>)<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">findAllUser</span><span class="hljs-params">(</span></span><br><span class="hljs-function"><span class="hljs-params">            @RequestParam(name = <span class="hljs-string">"pageNum"</span>, required = <span class="hljs-keyword">false</span>, defaultValue = <span class="hljs-string">"1"</span>)</span></span><br><span class="hljs-function">                    <span class="hljs-keyword">int</span> pageNum,</span><br><span class="hljs-function">            @<span class="hljs-title">RequestParam</span><span class="hljs-params">(name = <span class="hljs-string">"pageSize"</span>, required = <span class="hljs-keyword">false</span>, defaultValue = <span class="hljs-string">"10"</span>)</span></span><br><span class="hljs-function">                    <span class="hljs-keyword">int</span> pageSize)</span>&#123;<br>        <span class="hljs-comment">//开始分页</span><br>        PageHelper.startPage(pageNum,pageSize);<br>        <span class="hljs-keyword">return</span> userService.findAllUser(pageNum,pageSize);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="项目最终的结构"><a href="#项目最终的结构" class="headerlink" title="项目最终的结构"></a>项目最终的结构</h2><p><img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046467097250.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">项目结构</span></p>
+<blockquote>
+<p>到这里如果项目就成功搭建完成了，如果还是报错的话，请仔细看看配置，后面会给出源码地址，程序员就是要不断和bug进行斗争，加油。</p>
+</blockquote>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>启动项目</p>
+<p><img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046467147252.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">启动项目</span></p>
+<p>这样就表示启动成功了</p>
+<p>然后，开始测试吧，博主使用的是postMan，一个进行http请求的测试工具</p>
+<h3 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h3><p><img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046467254251.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">添加数据</span></p>
+<h3 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h3><p><img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046467296252.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">查询数据</span></p>
+<p>源码地址：</p>
+<p><a href="https://github.com/WinterChenS/springboot2-mybatis-demo" target="_blank" rel="noopener">https://github.com/WinterChenS/springboot2-mybatis-demo</a></p>
+<p>如果遇到问题可以加我wechat：</p>
+<img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046784292084.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  width = "200" height = "200"  /><span class="image-caption">wechat</span>
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>winter chen</li>
+    <li><strong>本文链接：</strong><a href="https://blog.winterchen.com/2018/04/21/springboot2-mybatis/index.html" title="https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2018&#x2F;04&#x2F;21&#x2F;springboot2-mybatis&#x2F;index.html">https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2018&#x2F;04&#x2F;21&#x2F;springboot2-mybatis&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/" rel="tag">mybatis</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a href="/2018/04/23/about-tree-body-1/"><i class="iconfont iconleft"></i>关于《三体》的一些读后感-农场主和射手</a>
+    <a href="/2018/04/10/fastdfs-centos7/">用FastDFS一步步搭建文件管理系统(CentOS 7)<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+    <div class="btn" id="comments-btn">查看评论</div>
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk" class="gitalk"></div>
+<script defer src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  window.onload = function () {
+    var gitalk = new Gitalk({
+      clientID: '77f2adc33e0112d086d7',
+      clientSecret: 'e926aa3a621556609b2c2b76d89320fa524e23cd',
+      id: window.location.pathname,
+      repo: 'WinterChenS.github.io',
+      owner: 'WinterChenS',
+      admin: 'WinterChenS'
+    });
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        gitalk.render('gitalk');
+      });
+    } else {
+      gitalk.render('gitalk');
+    }
+  }
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#写在前面"><span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境-版本一览："><span class="toc-text">环境&#x2F;版本一览：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#额外功能："><span class="toc-text">额外功能：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始搭建："><span class="toc-text">开始搭建：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目："><span class="toc-text">创建项目：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖文件："><span class="toc-text">依赖文件：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目结构："><span class="toc-text">项目结构：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置："><span class="toc-text">配置：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建包："><span class="toc-text">创建包：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新建配置类："><span class="toc-text">新建配置类：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据库和数据表"><span class="toc-text">创建数据库和数据表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建实体类：UserDomain-java"><span class="toc-text">创建实体类：UserDomain.java</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建dao："><span class="toc-text">创建dao：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建mybatis映射文件：-UserMapper-xml"><span class="toc-text">创建mybatis映射文件： UserMapper.xml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建剩余的controller，service包和文件"><span class="toc-text">创建剩余的controller，service包和文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#项目最终的结构"><span class="toc-text">项目最终的结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#添加数据"><span class="toc-text">添加数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查询数据"><span class="toc-text">查询数据</span></a></li></ol></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="https://github.com/winterchens "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:i@winterchen.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+    <div class="search">
+  <div class="search-container">
+    <div class="search-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <div class="search-input-wrapper">
+      <i class="search-input-icon iconfont iconsearch"></i>
+      <input class="search-input" type="search" id="search-input" placeholder="Search..." autofocus autocomplete="off"
+        autocorrect="off" autocapitalize="off">
+    </div>
+    <div class="search-output" id="search-output"></div>
+  </div>
+</div>
+  
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <script>
+    window.ga = window.ga || function () {
+      (ga.q = ga.q || []).push(arguments)
+    };
+    ga.l = +new Date;
+    ga('create', 'UA-155319408-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script defer src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script>
+    var _mtac = {};
+    (function () {
+      var mta = document.createElement("script");
+      mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "500722607");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+
+
+
+</html>

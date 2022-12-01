@@ -1,0 +1,528 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-Hans" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>SpringCloud系列教程(五)之SpringCloud Gateway 网关聚合开发文档 swagger knife4j 和登录权限统一验证 - Luis Blog</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content="java,spring,springboot,springcloud,mybatis,jQuery,html,css, springcloud">
+  <meta name="description" content="
+阅读提醒：
+
+
+本文面向的是有一定springboo...">
+  <meta name="author" content="winter chen">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xt256.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: '',
+        wechat: ''
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://gitee.com/winter_chen/img/raw/master/blog/20210413131918.jpeg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: true,
+        path: '/search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+        <i class="iconfont iconsearch j-navbar-search"></i>
+      
+    </div>
+    <div class="center">SpringCloud系列教程(五)之SpringCloud Gateway 网关聚合开发文档 swagger knife4j 和登录权限统一验证</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="https://www.winterchen.com " target="_blank" rel="noopener" class="underline "> 主页</a>
+      </li><li class="menu-item">
+        <a href="/ " class="underline "> 博客首页</a>
+      </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 摄影</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210804122154.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">SpringCloud系列教程(五)之SpringCloud Gateway 网关聚合开发文档 swagger knife4j 和登录权限统一验证</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>August 04, 2021</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>14786</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <blockquote>
+<p>阅读提醒：</p>
+</blockquote>
+<ol>
+<li>本文面向的是有一定springboot基础者</li>
+<li>本次教程使用的Spring Cloud Hoxton RELEASE版本</li>
+<li>由于knife4j比swagger更加友好，所以本文集成knife4j</li>
+<li>本文依赖上一篇的工程，请查看上一篇文章以做到无缝衔接，或者直接下载源码：<a href="https://github.com/WinterChenS/spring-cloud-hoxton-study" target="_blank" rel="noopener">https://github.com/WinterChenS/spring-cloud-hoxton-study</a></li>
+</ol>
+<h2 id="前情概要"><a href="#前情概要" class="headerlink" title="前情概要"></a>前情概要</h2><ul>
+<li><a href="https://juejin.cn/post/6987998097209032741" target="_blank" rel="noopener" title="https://juejin.cn/post/6987998097209032741">SpringCloud系列教程(一)开篇</a></li>
+<li><a href="https://juejin.cn/post/6991323018802757662" target="_blank" rel="noopener" title="https://juejin.cn/post/6991323018802757662">SpringCloud系列教程(二)之Nacos | 8月更文挑战</a></li>
+<li><a href="https://juejin.cn/post/6991635985847025671" target="_blank" rel="noopener" title="https://juejin.cn/post/6991635985847025671"># SpringCloud系列教程(三)之Open Feign | 8月更文挑战</a></li>
+<li><a href="https://juejin.cn/post/6992010061576929310" target="_blank" rel="noopener">SpringCloud系列教程(四)之SpringCloud Gateway | 8月更文挑战</a></li>
+</ul>
+<h2 id="本文概览"><a href="#本文概览" class="headerlink" title="本文概览"></a>本文概览</h2><ul>
+<li>Spring Cloud Gateway集成Knife4j</li>
+<li>Spring Cloud Gateway集成登录权限统一校验</li>
+</ul>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>上篇文章介绍了Spring Cloud Gateway的使用，本文将介绍如何在网关层聚合swagger文档，聚合之后可以非常方便的对开发文档进行管理，也是业界比较常用的方式。</p>
+<p>首先在<strong>父pom</strong>文件<code>dependencyManagement</code> 节点中增加knife4j的依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.github.xiaoymin<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>knife4j-spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.0.3<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="配置-spring-cloud-nacos-provider和spring-cloud-nacos-consumer"><a href="#配置-spring-cloud-nacos-provider和spring-cloud-nacos-consumer" class="headerlink" title="配置 spring-cloud-nacos-provider和spring-cloud-nacos-consumer"></a>配置 spring-cloud-nacos-provider和spring-cloud-nacos-consumer</h2><blockquote>
+<p>注意，这里标题中两个工程为前几篇文章中构建的，如果不想看前几篇文章，就创建两个模块然后分别集成nacos，knife4j即可。</p>
+</blockquote>
+<p>在两个模块中分别增加maven依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.github.xiaoymin<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>knife4j-spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>在两个模块中分别新增配置类：<code>Knife4jConfiguration</code> </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Knife4jConfiguration</span> </span>&#123;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;swagger.enable:true&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> enableSwagger;<br><br>    <span class="hljs-meta">@Bean</span>(value = <span class="hljs-string">"defaultApi2"</span>)<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Docket <span class="hljs-title">createRestApi</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Docket(DocumentationType.SWAGGER_2)<br>                .apiInfo(<span class="hljs-keyword">new</span> ApiInfoBuilder()<br>                            .title(<span class="hljs-string">"provider服务"</span>)<br>                            .version(<span class="hljs-string">"1.0"</span>)<br>                            .build())<br>                .enable(enableSwagger)<br>                .select()<br>                .apis(RequestHandlerSelectors.basePackage(<span class="hljs-string">"com.winterchen.nacos.rest"</span>))<br>                .paths(PathSelectors.any())<br>                .build();<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>注意有些相关的信息需要修改。</p>
+<p>新增配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">swagger:</span><br>    <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="配置-spring-cloud-gateway"><a href="#配置-spring-cloud-gateway" class="headerlink" title="配置 spring-cloud-gateway"></a>配置 spring-cloud-gateway</h2><p>接下来是重头戏，如何在Spring Cloud Gateway中聚合swagger文档。</p>
+<p>首先在pom中增加maven依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.github.xiaoymin<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>knife4j-spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>新增Swagger的配置类：<code>SwaggerResourceConfig</code> </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-meta">@Primary</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SwaggerResourceConfig</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">SwaggerResourcesProvider</span> </span>&#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> RouteLocator routeLocator;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> GatewayProperties gatewayProperties;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">SwaggerResourceConfig</span><span class="hljs-params">(RouteLocator routeLocator, GatewayProperties gatewayProperties)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.routeLocator = routeLocator;<br>        <span class="hljs-keyword">this</span>.gatewayProperties = gatewayProperties;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> List&lt;SwaggerResource&gt; <span class="hljs-title">get</span><span class="hljs-params">()</span> </span>&#123;<br>        List&lt;SwaggerResource&gt; resources = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>        List&lt;String&gt; routes = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>        <span class="hljs-comment">//获取所有路由的ID</span><br>        routeLocator.getRoutes().subscribe(route -&gt; routes.add(route.getId()));<br>        <span class="hljs-comment">//过滤出配置文件中定义的路由-&gt;过滤出Path Route Predicate-&gt;根据路径拼接成api-docs路径-&gt;生成SwaggerResource</span><br>        gatewayProperties.getRoutes().stream().filter(routeDefinition -&gt; routes.contains(routeDefinition.getId())).forEach(route -&gt; &#123;<br>            route.getPredicates().stream()<br>                    .filter(predicateDefinition -&gt; (<span class="hljs-string">"Path"</span>).equalsIgnoreCase(predicateDefinition.getName()))<br>                    .forEach(predicateDefinition -&gt; resources.add(swaggerResource(route.getId(),<br>                            predicateDefinition.getArgs().get(NameUtils.GENERATED_NAME_PREFIX + <span class="hljs-string">"0"</span>)<br>                                    .replace(<span class="hljs-string">"**"</span>, <span class="hljs-string">"v2/api-docs"</span>))));<br>        &#125;);<br><br>        <span class="hljs-keyword">return</span> resources;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> SwaggerResource <span class="hljs-title">swaggerResource</span><span class="hljs-params">(String name, String location)</span> </span>&#123;<br>        SwaggerResource swaggerResource = <span class="hljs-keyword">new</span> SwaggerResource();<br>        swaggerResource.setName(name);<br>        swaggerResource.setLocation(location);<br>        swaggerResource.setSwaggerVersion(<span class="hljs-string">"2.0"</span>);<br>        <span class="hljs-keyword">return</span> swaggerResource;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>主要的配置的作用已经在代码中进行注释。</p>
+<p>新增一个控制器：<code>SwaggerHandler</code> </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RestController</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SwaggerHandler</span> </span>&#123;<br><br>    <span class="hljs-meta">@Autowired</span>(required = <span class="hljs-keyword">false</span>)<br>    <span class="hljs-keyword">private</span> SecurityConfiguration securityConfiguration;<br><br>    <span class="hljs-meta">@Autowired</span>(required = <span class="hljs-keyword">false</span>)<br>    <span class="hljs-keyword">private</span> UiConfiguration uiConfiguration;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> SwaggerResourcesProvider swaggerResources;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">SwaggerHandler</span><span class="hljs-params">(SwaggerResourcesProvider swaggerResources)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.swaggerResources = swaggerResources;<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Swagger安全配置，支持oauth和apiKey设置</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/swagger-resources/configuration/security"</span>)<br>    <span class="hljs-keyword">public</span> Mono&lt;ResponseEntity&lt;SecurityConfiguration&gt;&gt; securityConfiguration() &#123;<br>        <span class="hljs-keyword">return</span> Mono.just(<span class="hljs-keyword">new</span> ResponseEntity&lt;&gt;(<br>                Optional.ofNullable(securityConfiguration).orElse(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK));<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Swagger UI配置</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/swagger-resources/configuration/ui"</span>)<br>    <span class="hljs-keyword">public</span> Mono&lt;ResponseEntity&lt;UiConfiguration&gt;&gt; uiConfiguration() &#123;<br>        <span class="hljs-keyword">return</span> Mono.just(<span class="hljs-keyword">new</span> ResponseEntity&lt;&gt;(<br>                Optional.ofNullable(uiConfiguration).orElse(UiConfigurationBuilder.builder().build()), HttpStatus.OK));<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Swagger资源配置，微服务中这各个服务的api-docs信息</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/swagger-resources"</span>)<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Mono&lt;ResponseEntity&gt; <span class="hljs-title">swaggerResources</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> Mono.just((<span class="hljs-keyword">new</span> ResponseEntity&lt;&gt;(swaggerResources.get(), HttpStatus.OK)));<br>    &#125;<br>&#125;-----------------<br></code></pre></td></tr></table></figure>
+
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>分别运行：spring-cloud-nacos-provider，spring-cloud-nacos-consumer，spring-cloud-gateway 三个服务。</p>
+<p>打开swagger的地址: <a href="http://127.0.0.1:15010/doc.html" target="_blank" rel="noopener">http://127.0.0.1:15010/doc.html</a></p>
+<p>验证结果：</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210731124615.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>看到上图中的结果说明聚合成功。</p>
+<h2 id="集成登录权限的统一校验"><a href="#集成登录权限的统一校验" class="headerlink" title="集成登录权限的统一校验"></a>集成登录权限的统一校验</h2><blockquote>
+<p>为了直达主题，本次集成登录权限会尽量的简单，其中忽略一些细节，比如登录服务模块，可以查看demo的源码：<a href="https://github.com/WinterChenS/spring-cloud-hoxton-study/tree/main/spring-cloud-auth" target="_blank" rel="noopener">https://github.com/WinterChenS/spring-cloud-hoxton-study/tree/main/spring-cloud-auth</a><br>并且我会在关键的点上明确讲解。</p>
+</blockquote>
+<p>在开始之前需要明白一个原理，如果要实现统一鉴权，那么需要对所有的请求进行统一的拦截，要实现统一的拦截，在Spring Cloud Gateway中有一个filter接口为：<code>GlobalFilter</code> 。</p>
+<p>所以我们可以通过实现<code>GlobalFilter</code> 接口来实现请求的拦截。</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>新建一个类实现<code>GlobalFilter</code> 接口，并且实现<code>filter</code> 方法，在此基础上我们还需要实现<code>Ordered</code> 接口，控制拦截的优先级，鉴权拦截优先级是最高的，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Slf</span>4j<br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AuthorizeFilter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">GlobalFilter</span>, <span class="hljs-title">Ordered</span> </span>&#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    UserRedisCollection userRedisCollection;<br><br>		<span class="hljs-comment">// (1)</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">checkWhiteList</span><span class="hljs-params">(String uri)</span> </span>&#123;<br>        <span class="hljs-keyword">boolean</span> access = <span class="hljs-keyword">false</span>;<br>        <span class="hljs-keyword">if</span> (uri.contains(<span class="hljs-string">"/login"</span>) || uri.contains(<span class="hljs-string">"/v2/api-docs"</span>)) &#123;<br>            access = <span class="hljs-keyword">true</span>;<br>            <span class="hljs-keyword">if</span> (uri.contains(<span class="hljs-string">"logout"</span>)) &#123;<br>                access = <span class="hljs-keyword">false</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (uri.contains(<span class="hljs-string">"/open-api"</span>)) &#123;<br>            access = <span class="hljs-keyword">true</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> access;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Mono&lt;Void&gt; <span class="hljs-title">filter</span><span class="hljs-params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> </span>&#123;<br>			  <span class="hljs-comment">// (2)</span><br>        ServerHttpRequest request = exchange.getRequest();<br>        ServerHttpResponse response = exchange.getResponse();<br>        String uri = request.getURI().getPath();<br>				<br>				<span class="hljs-comment">// (3)</span><br>        <span class="hljs-comment">//前端访问不到header问题</span><br>        response.getHeaders().add(<span class="hljs-string">"Access-Control-Allow-Headers"</span>,<span class="hljs-string">"X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, token"</span>);<br>        response.getHeaders().add(<span class="hljs-string">"Access-Control-Expose-Headers"</span>, <span class="hljs-string">"token"</span>);<br>        ServerHttpRequest mutableReq = request.mutate()<br>                .header(DefaultConstants.IP_ADDRESS, getIpAddress(request))<br>                .build();<br>        ServerWebExchange mutableExchange = exchange.mutate().request(mutableReq).build();<br>        <span class="hljs-comment">// (4)</span><br>				<span class="hljs-comment">//检查白名单</span><br>        <span class="hljs-keyword">if</span> (checkWhiteList(uri)) &#123;<br>            <span class="hljs-keyword">return</span> chain.filter(mutableExchange);<br>        &#125;<br>				<br>				<span class="hljs-comment">// (5)</span><br>        <span class="hljs-comment">//从request获取token</span><br>        String accessToken = request.getHeaders().getFirst(DefaultConstants.TOKEN);<br>        log.info(<span class="hljs-string">"AccessToken: [&#123;&#125;]"</span>, accessToken);<br><br>				<span class="hljs-comment">// (6)</span><br>        <span class="hljs-keyword">if</span> (StringUtils.isBlank(accessToken)) &#123;<br>            response.setStatusCode(HttpStatus.UNAUTHORIZED);<br>            <span class="hljs-keyword">return</span> getVoidMono(response, ResultCodeEnum.UNAUTHORIZED, <span class="hljs-string">"未登录"</span>);<br>        &#125;<br>        Claims claims = <span class="hljs-keyword">null</span>;<br>        <span class="hljs-keyword">try</span> &#123;<br>						<span class="hljs-comment">// (7)</span><br>            claims = JwtUtil.parseJWT(accessToken, DefaultConstants.SECRET_KEY);<br>						<br>            <span class="hljs-keyword">if</span> (claims == <span class="hljs-keyword">null</span>) &#123;<br>                response.setStatusCode(HttpStatus.UNAUTHORIZED);<br>                <span class="hljs-keyword">return</span> getVoidMono(response, ResultCodeEnum.UNAUTHORIZED, <span class="hljs-string">"未登录"</span>);<br>            &#125;<br>            log.info(<span class="hljs-string">"claims is:&#123;&#125;"</span>, claims);<br>            <span class="hljs-keyword">if</span> (claims.getSubject().equals(DefaultConstants.USER))&#123;<br>                <span class="hljs-keyword">if</span>(claims.get(DefaultConstants.USERID)!=<span class="hljs-keyword">null</span>) &#123;<br>                    Long userId = Long.parseLong(claims.get(DefaultConstants.USERID).toString());<br><br>                    log.info(<span class="hljs-string">"userId:&#123;&#125;"</span>, userId);<br>                    Map&lt;String, Object&gt; map = Maps.newHashMapWithExpectedSize(<span class="hljs-number">1</span>);<br>                    map.put(DefaultConstants.USERID,userId.toString());<br>										<br>										<span class="hljs-comment">// (8)</span><br>                    UserInfoEntity userInfo = userRedisCollection.getAuthUserInfoAndCache(userId);<br>                    <span class="hljs-comment">//判断是否</span><br>                    <span class="hljs-keyword">if</span> (userInfo == <span class="hljs-keyword">null</span>) &#123;<br>                        response.setStatusCode(HttpStatus.UNAUTHORIZED);<br>                        <span class="hljs-keyword">return</span> getVoidMono(response, ResultCodeEnum.UNAUTHORIZED, <span class="hljs-string">"未登录"</span>);<br>                    &#125;<br><br>										<span class="hljs-comment">// (9)</span><br>                    String token = JwtUtil.createToken(DefaultConstants.USER, map, DefaultConstants.SECRET_KEY);<br>                    response.getHeaders().add(DefaultConstants.TOKEN, token);<br>										<br>                    mutableReq = request.mutate().header(DefaultConstants.USER_ID, String.valueOf(userId))<br>                            .header(DefaultConstants.IP_ADDRESS, getIpAddress(request))<br>                            .build();<br>                    mutableExchange = exchange.mutate().request(mutableReq).build();<br>                    <span class="hljs-keyword">return</span> chain.filter(mutableExchange);<br><br>                &#125;<br><br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            response.setStatusCode(HttpStatus.UNAUTHORIZED);<br>            <span class="hljs-keyword">return</span> getVoidMono(response, ResultCodeEnum.UNAUTHORIZED, <span class="hljs-string">"未登录"</span>);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> getVoidMono(response, ResultCodeEnum.UNAUTHORIZED, <span class="hljs-string">"未登录"</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> Mono&lt;Void&gt; <span class="hljs-title">getVoidMono</span><span class="hljs-params">(ServerHttpResponse serverHttpResponse, ResultCodeEnum resultCode, String responseText)</span> </span>&#123;<br>        serverHttpResponse.getHeaders().add(<span class="hljs-string">"Content-Type"</span>, <span class="hljs-string">"application/json;charset=UTF-8"</span>);<br>        CommonResult&lt;?&gt; result = CommonResult.failed(resultCode.getCode(), responseText);<br>        DataBuffer dataBuffer = serverHttpResponse.bufferFactory().wrap(JSON.toJSONString(result).getBytes());<br>        <span class="hljs-keyword">return</span> serverHttpResponse.writeWith(Flux.just(dataBuffer));<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getIpAddress</span><span class="hljs-params">(ServerHttpRequest request)</span> </span>&#123;<br>        String ip = request.getHeaders().getFirst(<span class="hljs-string">"x-forwarded-for"</span>);<br>        <span class="hljs-keyword">if</span> (ip == <span class="hljs-keyword">null</span> || ip.length() == <span class="hljs-number">0</span> || <span class="hljs-string">"unknown"</span>.equalsIgnoreCase(ip)) &#123;<br>            ip = request.getHeaders().getFirst(<span class="hljs-string">"Proxy-Client-IP"</span>);<br>        &#125;<br>        <span class="hljs-keyword">if</span> (ip == <span class="hljs-keyword">null</span> || ip.length() == <span class="hljs-number">0</span> || <span class="hljs-string">"unknown"</span>.equalsIgnoreCase(ip)) &#123;<br>            ip = request.getHeaders().getFirst(<span class="hljs-string">"WL-Proxy-Client-IP"</span>);<br>        &#125;<br>        <span class="hljs-keyword">if</span> (ip == <span class="hljs-keyword">null</span> || ip.length() == <span class="hljs-number">0</span> || <span class="hljs-string">"unknown"</span>.equalsIgnoreCase(ip)) &#123;<br>            ip = request.getHeaders().getFirst(<span class="hljs-string">"HTTP_CLIENT_IP"</span>);<br>        &#125;<br>        <span class="hljs-keyword">if</span> (ip == <span class="hljs-keyword">null</span> || ip.length() == <span class="hljs-number">0</span> || <span class="hljs-string">"unknown"</span>.equalsIgnoreCase(ip)) &#123;<br>            ip = request.getHeaders().getFirst(<span class="hljs-string">"HTTP_X_FORWARDED_FOR"</span>);<br>        &#125;<br>        <span class="hljs-keyword">if</span> (ip == <span class="hljs-keyword">null</span> || ip.length() == <span class="hljs-number">0</span> || <span class="hljs-string">"unknown"</span>.equalsIgnoreCase(ip)) &#123;<br>            ip = request.getRemoteAddress().getHostString();<br>        &#125;<br>        <span class="hljs-keyword">return</span> ip;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getOrder</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> -<span class="hljs-number">100</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>(1) 这个方法可以将白名单加入，当请求到这些url的时候不进行权限的校验</li>
+<li>(2) 我们在使用Spring Cloud Gateway的时候，注意到过滤器（包括GatewayFilter、GlobalFilter和过滤器链GatewayFilterChain），都依赖到ServerWebExchange，这里filter的设计跟Servlet中的的filter相似，也就是当前过滤器决定是否执行下一个过滤器的逻辑，而ServerWebExchange就是当前请求和响应的上下文，不仅包含了request和response，还包含了一些扩展方法，如代码中可以获取到request和response。</li>
+<li>(3) 这一步，主要是解决前端无法中header中获取到需要获取的参数。比如<code>token</code> 。</li>
+<li>(4) 这里对应了第一步白名单的判断，如果当前请求在白名单就跳过后面的一些权限的判断，直接执行下一个过滤器。</li>
+<li>(5) 这里很简单，就是从request中获取到token，方便jwt转换成对应的用户信息。</li>
+<li>(6) 如果请求没有携带token就不予通过。</li>
+<li>(7) jwt将token转换成用户信息，用于后面的判断以及用户的基本信息。</li>
+<li>(8) 上面获取到用户的信息之后，根据用户的userId查询redis中是否存在该用户数据，如果不存在表示该用户的用户信息已经过期了，而且从redis查询的时候会重置超时时间（也就保证了只要经常的在线就不需要重新登录，超过设定的时间没有在线，那么就需要重新登录）。注意：这里是需要跟登录服务进行联动，也就是登录成功之后将用户的信息存入redis，然后gateway这边能取到该用户信息。所以需要保证这一点。</li>
+<li>(9) 这里会重新颁发token，主要是防止token会过期，token的过期时间在jwtUtils中可以设置，所以，前端需要每次请求之后都将新的token作为下一次请求的token。</li>
+<li>注意：本文的token是放在header中，前端小伙伴需要从header中取token。</li>
+</ul>
+<p>代码中的方法：<code>UserRedisCollection.getAuthUserInfoAndCache(Long userId)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> RedisTemplate redisTemplate;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> UserInfoEntity <span class="hljs-title">getAuthUserInfoAndCache</span><span class="hljs-params">(Long userId)</span> </span>&#123;<br>        CommonAssert.meetCondition(userId == <span class="hljs-keyword">null</span>, <span class="hljs-string">"未获取到userId"</span>);<br>        String key = DefaultConstants.USER_INFO_REDIS + userId;<br>        UserInfoEntity entity = (UserInfoEntity) redisTemplate.opsForValue().get(key);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">null</span> != entity) &#123;<br>            redisTemplate.opsForValue().set(key, entity, <span class="hljs-number">60</span> * <span class="hljs-number">24</span> * <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>, TimeUnit.MILLISECONDS);<br>            <span class="hljs-keyword">return</span> entity;<br>        &#125;<br>        CommonAssert.meetCondition(<span class="hljs-keyword">true</span>, <span class="hljs-string">"当前用户未登陆，未获取到登陆信息"</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>该方法简单，就是根据userId获取到用户信息的，成功获取之后会重置超时时间，时长可以根据需要进行修改。</p>
+<p>关于本文的登录服务，可以从demo源码中获取：</p>
+<p><a href="https://github.com/WinterChenS/spring-cloud-hoxton-study/tree/main/spring-cloud-auth" target="_blank" rel="noopener">spring-cloud-hoxton-study/spring-cloud-auth at main · WinterChenS/spring-cloud-hoxton-study</a></p>
+<h3 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h3><p>分别启动gateway,provider,auth服务。</p>
+<p>首先，测试未登录的情况：</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210731124637.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>然后进入auth服务，打开登录接口：</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210731124653.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>打开Headers，复制token</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210731124712.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>再次切换到provider服务，设置文档的全局参数：</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210731124726.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>然后刷新一下页面再请求就可以发现，请求成功：</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210731124735.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>到这里就成功集成了gateway鉴权了。</p>
+<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><ul>
+<li>至于登出的逻辑，思路是这样的，登出只需要在auth服务中将用户信息从redis清除即可，这样在gateway中查询redis就可以查到用户登录信息已经失效了。</li>
+<li>如何在服务中获取当前登录用户信息呢？这个其实挺简单的，一般的做法就是写一个工具类，该工具类从请求的header中获取token，或者在请求阶段就讲userId设置到token中，如果只有token就讲token转换成用户信息，然后根据id从redis中获取用户详细信息，不过一般只需要userId就可以了，这边给个示例：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getUserIdByCurrent</span><span class="hljs-params">()</span> </span>&#123;<br>        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder<br>                .getRequestAttributes();<br>        <span class="hljs-keyword">if</span> (attributes != <span class="hljs-keyword">null</span>) &#123;<br>            HttpServletRequest request = attributes.getRequest();<br>            <span class="hljs-keyword">return</span> request.getHeader(ConstantsUtil.USER_ID);<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;<br>        &#125;<br><br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本章介绍了如何在gateway中聚合swagger文档以及统一鉴权的集成，内容其实并不多，原本打算分开两篇进行介绍的，swagger部分没有什么需要注意的原理，索性就放在一起，真正重要的点就是Spring Cloud Gateway中的filter的应用，这部分可以通过查找资料详细的了解一下，下一篇将介绍如何使用限流组件Sentinel，这个组件由alibaba提供。</p>
+<h2 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h2><p><a href="https://github.com/WinterChenS/spring-cloud-hoxton-study" target="_blank" rel="noopener">https://github.com/WinterChenS/spring-cloud-hoxton-study</a></p>
+<p>参考文献</p>
+<p><a href="https://juejin.cn/post/6844903846469189645" target="_blank" rel="noopener">Spring Cloud Gateway-ServerWebExchange核心方法与请求或者响应内容的修改</a></p>
+
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>winter chen</li>
+    <li><strong>本文链接：</strong><a href="https://blog.winterchen.com/2021/08/04/2021-08-04-spring-cloud-hoxton-5-swagger/index.html" title="https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2021&#x2F;08&#x2F;04&#x2F;2021-08-04-spring-cloud-hoxton-5-swagger&#x2F;index.html">https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2021&#x2F;08&#x2F;04&#x2F;2021-08-04-spring-cloud-hoxton-5-swagger&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hoxton/" rel="tag">Hoxton</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/auth/" rel="tag">auth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gateway/" rel="tag">gateway</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/knife4j/" rel="tag">knife4j</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swagger/" rel="tag">swagger</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a href="/2021/08/05/2021-08-05-spring-cloud-hoxton-6-sentinel/"><i class="iconfont iconleft"></i>SpringCloud系列教程(六)之SpringCloud 使用sentinel作为熔断器</a>
+    <a href="/2021/08/03/2021-08-03-spring-cloud-hoxton-4-gateway/">SpringCloud系列教程(四)之SpringCloud Gateway<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+    <div class="btn" id="comments-btn">查看评论</div>
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk" class="gitalk"></div>
+<script defer src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  window.onload = function () {
+    var gitalk = new Gitalk({
+      clientID: '77f2adc33e0112d086d7',
+      clientSecret: 'e926aa3a621556609b2c2b76d89320fa524e23cd',
+      id: window.location.pathname,
+      repo: 'WinterChenS.github.io',
+      owner: 'WinterChenS',
+      admin: 'WinterChenS'
+    });
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        gitalk.render('gitalk');
+      });
+    } else {
+      gitalk.render('gitalk');
+    }
+  }
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前情概要"><span class="toc-text">前情概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本文概览"><span class="toc-text">本文概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始"><span class="toc-text">开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-spring-cloud-nacos-provider和spring-cloud-nacos-consumer"><span class="toc-text">配置 spring-cloud-nacos-provider和spring-cloud-nacos-consumer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置-spring-cloud-gateway"><span class="toc-text">配置 spring-cloud-gateway</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集成登录权限的统一校验"><span class="toc-text">集成登录权限的统一校验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试-1"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拓展"><span class="toc-text">拓展</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码地址"><span class="toc-text">源码地址</span></a></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="https://github.com/winterchens "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:i@winterchen.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+    <div class="search">
+  <div class="search-container">
+    <div class="search-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <div class="search-input-wrapper">
+      <i class="search-input-icon iconfont iconsearch"></i>
+      <input class="search-input" type="search" id="search-input" placeholder="Search..." autofocus autocomplete="off"
+        autocorrect="off" autocapitalize="off">
+    </div>
+    <div class="search-output" id="search-output"></div>
+  </div>
+</div>
+  
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <script>
+    window.ga = window.ga || function () {
+      (ga.q = ga.q || []).push(arguments)
+    };
+    ga.l = +new Date;
+    ga('create', 'UA-155319408-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script defer src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script>
+    var _mtac = {};
+    (function () {
+      var mta = document.createElement("script");
+      mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "500722607");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+
+
+
+</html>

@@ -1,0 +1,455 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-Hans" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>如何在CentOS 7上安装和配置Nginx - Luis Blog</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content="java,spring,springboot,springcloud,mybatis,jQuery,html,css, Linux,nginx,centos7">
+  <meta name="description" content="
+如何在centOS7中安装和配置nginx呢？
+
+1...">
+  <meta name="author" content="winter chen">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xt256.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: '',
+        wechat: ''
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://gitee.com/winter_chen/img/raw/master/blog/20210413131918.jpeg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: true,
+        path: '/search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+        <i class="iconfont iconsearch j-navbar-search"></i>
+      
+    </div>
+    <div class="center">如何在CentOS 7上安装和配置Nginx</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="https://www.winterchen.com " target="_blank" rel="noopener" class="underline "> 主页</a>
+      </li><li class="menu-item">
+        <a href="/ " class="underline "> 博客首页</a>
+      </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 摄影</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="https://images.unsplash.com/photo-1526740048776-83b7bbf6860d?ixlib=rb-0.3.5&s=61f5e69ba90a009c860fa2d47ce5da3d&auto=format&fit=crop&w=2104&q=80" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">如何在CentOS 7上安装和配置Nginx</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>May 30, 2018</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>5147</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+          <p><p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046765480328.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>如何在centOS7中安装和配置nginx呢？</p></p>
+        
+        <h2 id="1-安装CentOS-7-EPEL仓库"><a href="#1-安装CentOS-7-EPEL仓库" class="headerlink" title="1.安装CentOS 7 EPEL仓库"></a>1.安装CentOS 7 EPEL仓库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo yum install epel-release<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-安装Nginx"><a href="#2-安装Nginx" class="headerlink" title="2.安装Nginx"></a>2.安装Nginx</h2><p>现在Nginx存储库已经安装在您的服务器上，使用以下<code>yum</code>命令安装Nginx ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo yum install nginx<br></code></pre></td></tr></table></figure>
+
+<p>在对提示回答yes后，Nginx将在服务器上完成安装。</p>
+<h2 id="3-启动Nginx"><a href="#3-启动Nginx" class="headerlink" title="3.启动Nginx"></a>3.启动Nginx</h2><p>Nginx不会自行启动。要运行Nginx，请输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo systemctl start nginx<br></code></pre></td></tr></table></figure>
+
+<p>如果您正在运行防火墙，请运行以下命令以允许HTTP和HTTPS通信：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo firewall-cmd --permanent --zone&#x3D;public --add-service&#x3D;http <br>sudo firewall-cmd --permanent --zone&#x3D;public --add-service&#x3D;https<br>sudo firewall-cmd --reload<br></code></pre></td></tr></table></figure>
+
+<p>打开浏览器输入ip地址看到nginx的首页就说明你启动成功了</p>
+<h2 id="4-设置开机启动"><a href="#4-设置开机启动" class="headerlink" title="4.设置开机启动"></a>4.设置开机启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo systemctl enable nginx<br></code></pre></td></tr></table></figure>
+
+<h2 id="5-配置nginx"><a href="#5-配置nginx" class="headerlink" title="5.配置nginx"></a>5.配置nginx</h2><p>使用<code>yum</code>进行安装的nginx的配置文件在<code>/etc/nginx/nginx.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">vim &#x2F;etc&#x2F;nginx&#x2F;nginx.conf<br></code></pre></td></tr></table></figure>
+
+<h3 id="nginx-conf"><a href="#nginx-conf" class="headerlink" title="nginx.conf:"></a>nginx.conf:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><code class="hljs plain"># For more information on configuration, see:<br>#   * Official English Documentation: http:&#x2F;&#x2F;nginx.org&#x2F;en&#x2F;docs&#x2F;<br>#   * Official Russian Documentation: http:&#x2F;&#x2F;nginx.org&#x2F;ru&#x2F;docs&#x2F;<br><br>user nginx;<br><br>#nginx进程数，建议设置为等于CPU总核心数。<br>worker_processes auto;<br><br>#全局错误日志定义类型，[ debug | info | notice | warn | error | crit ]<br>error_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log;<br>pid &#x2F;run&#x2F;nginx.pid;#进程pid文件<br><br># Load dynamic modules. See &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;README.dynamic.<br>include &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;modules&#x2F;*.conf;<br><br>events &#123;<br>    #单个进程最大连接数（最大连接数&#x3D;连接数*进程数）<br>    #根据硬件调整，和前面工作进程配合起来用，尽量大，但是别把cpu跑到100%就行。每个进程允许的最多连接数，理论上每台nginx服务器的最大连接数为。	<br>    worker_connections 1024;<br>&#125;<br><br>#设定http服务器，利用它的反向代理功能提供负载均衡支持<br>http &#123;<br>    log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;<br>                      &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;<br>                      &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;<br><br>    access_log  &#x2F;var&#x2F;log&#x2F;nginx&#x2F;access.log  main;<br><br>		#开启高效文件传输模式，sendfile指令指定nginx是否调用sendfile函数来输出文件，对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络I&#x2F;O处理速度，降低系统的负载。注意：如果图片显示不正常把这个改成off。<br>    #sendfile指令指定 nginx 是否调用sendfile 函数（zero copy 方式）来输出文件，对于普通应用，必须设为on。如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络IO处理速度，降低系统uptime。<br>    sendfile            on;<br>    <br>    #此选项允许或禁止使用socke的TCP_CORK的选项，此选项仅在使用sendfile的时候使用<br>    tcp_nopush          on;<br>    tcp_nodelay         on;<br>    <br>    #长连接超时时间，单位是秒<br>    keepalive_timeout   65;<br>    types_hash_max_size 2048;<br><br>    include             &#x2F;etc&#x2F;nginx&#x2F;mime.types;<br>    default_type        application&#x2F;octet-stream;<br><br>    # Load modular configuration files from the &#x2F;etc&#x2F;nginx&#x2F;conf.d directory.<br>    # See http:&#x2F;&#x2F;nginx.org&#x2F;en&#x2F;docs&#x2F;ngx_core_module.html#include<br>    # for more information.<br>    include &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;*.conf;<br>	<br>  	#虚拟主机的配置<br>    server &#123;<br>    		#监听端口<br>        listen       80 default_server;<br>        listen       [::]:80 default_server;<br>        <br>        #域名可以有多个，用空格隔开<br>        server_name  luischen.cn;<br>       # root         &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html;<br>       # 重定向至https（按照需求）<br>        rewrite ^(.*)$  https:&#x2F;&#x2F;$host$1 permanent;<br>        # Load configuration files for the default server block.<br>        include &#x2F;etc&#x2F;nginx&#x2F;default.d&#x2F;*.conf;<br><br>        location &#x2F; &#123;<br>        &#125;<br><br>        error_page 404 &#x2F;404.html;<br>            location &#x3D; &#x2F;40x.html &#123;<br>        &#125;<br><br>        error_page 500 502 503 504 &#x2F;50x.html;<br>            location &#x3D; &#x2F;50x.html &#123;<br>        &#125;<br>    &#125;<br><br># Settings for a TLS enabled server.<br><br>    server &#123;<br>    		# 监听433端口<br>        listen       443 ssl http2 default_server;<br>        listen       [::]:443 ssl http2 default_server;<br>        server_name  luischen.cn;<br>        #root         &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html;<br>				# ssl证书<br>        ssl_certificate &quot;&#x2F;etc&#x2F;nginx&#x2F;1_luischen.cn_bundle.crt&quot;;<br>        ssl_certificate_key &quot;&#x2F;etc&#x2F;nginx&#x2F;2_luischen.cn.key&quot;;<br>        ssl_session_cache shared:SSL:1m;<br>        ssl_session_timeout  10m;<br>        ssl_ciphers HIGH:!aNULL:!MD5;<br>        ssl_prefer_server_ciphers on;<br>        <br>        #以下是一些反向代理的配置，可选。<br>        proxy_set_header X-Forwarded-Host $host;<br>        proxy_set_header X-Forwarded-Server $host;<br>        #后端的Web服务器可以通过X-Forwarded-For获取用户真实IP<br>        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>        proxy_set_header Host $host;<br>#        # Load configuration files for the default server block.<br>#        include &#x2F;etc&#x2F;nginx&#x2F;default.d&#x2F;*.conf;<br>#					<br>        location &#x2F; &#123;<br>         # 需要代理的端口-也就是nginx指向本地的端口<br>         proxy_pass http:&#x2F;&#x2F;127.0.0.1:8091;<br>         # 超时时间<br>         proxy_connect_timeout 600;<br>         proxy_read_timeout 600;<br>        &#125;<br>        <br>        error_page 404 &#x2F;404.html;<br>            location &#x3D; &#x2F;40x.html &#123;<br>        &#125;<br><br>        error_page 500 502 503 504 &#x2F;50x.html;<br>            location &#x3D; &#x2F;50x.html &#123;<br>        &#125;<br>    &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="6-nginx启动和停止命令"><a href="#6-nginx启动和停止命令" class="headerlink" title="6.nginx启动和停止命令"></a>6.nginx启动和停止命令</h2><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo systemctl start nginx<br></code></pre></td></tr></table></figure>
+
+<p>停止</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo systemctl stop nginx<br></code></pre></td></tr></table></figure>
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>winter chen</li>
+    <li><strong>本文链接：</strong><a href="https://blog.winterchen.com/2018/05/30/centos7-install-nginx/index.html" title="https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2018&#x2F;05&#x2F;30&#x2F;centos7-install-nginx&#x2F;index.html">https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2018&#x2F;05&#x2F;30&#x2F;centos7-install-nginx&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos7/" rel="tag">centos7</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a href="/2018/05/30/spring-boot-mybatis-mutil-database/"><i class="iconfont iconleft"></i>springboot2.0 mybatis 使用多数据源</a>
+    <a href="/2018/05/30/spring-autowired/">当springMVC上下文尚未初始化的时候如何@Autowired注入对象呢？<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+    <div class="btn" id="comments-btn">查看评论</div>
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk" class="gitalk"></div>
+<script defer src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  window.onload = function () {
+    var gitalk = new Gitalk({
+      clientID: '77f2adc33e0112d086d7',
+      clientSecret: 'e926aa3a621556609b2c2b76d89320fa524e23cd',
+      id: window.location.pathname,
+      repo: 'WinterChenS.github.io',
+      owner: 'WinterChenS',
+      admin: 'WinterChenS'
+    });
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        gitalk.render('gitalk');
+      });
+    } else {
+      gitalk.render('gitalk');
+    }
+  }
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-安装CentOS-7-EPEL仓库"><span class="toc-text">1.安装CentOS 7 EPEL仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-安装Nginx"><span class="toc-text">2.安装Nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-启动Nginx"><span class="toc-text">3.启动Nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-设置开机启动"><span class="toc-text">4.设置开机启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-配置nginx"><span class="toc-text">5.配置nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx-conf"><span class="toc-text">nginx.conf:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-nginx启动和停止命令"><span class="toc-text">6.nginx启动和停止命令</span></a></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="https://github.com/winterchens "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:i@winterchen.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+    <div class="search">
+  <div class="search-container">
+    <div class="search-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <div class="search-input-wrapper">
+      <i class="search-input-icon iconfont iconsearch"></i>
+      <input class="search-input" type="search" id="search-input" placeholder="Search..." autofocus autocomplete="off"
+        autocorrect="off" autocapitalize="off">
+    </div>
+    <div class="search-output" id="search-output"></div>
+  </div>
+</div>
+  
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <script>
+    window.ga = window.ga || function () {
+      (ga.q = ga.q || []).push(arguments)
+    };
+    ga.l = +new Date;
+    ga('create', 'UA-155319408-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script defer src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script>
+    var _mtac = {};
+    (function () {
+      var mta = document.createElement("script");
+      mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "500722607");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+
+
+
+</html>

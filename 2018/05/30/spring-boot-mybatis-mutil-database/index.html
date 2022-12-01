@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-Hans" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>springboot2.0 mybatis 使用多数据源 - Luis Blog</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content="java,spring,springboot,springcloud,mybatis,jQuery,html,css, springboot,mybatis,java">
+  <meta name="description" content="多数据源springboot2.0正式版发布之后，很多...">
+  <meta name="author" content="winter chen">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xt256.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: '',
+        wechat: ''
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://gitee.com/winter_chen/img/raw/master/blog/20210413131918.jpeg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: true,
+        path: '/search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+        <i class="iconfont iconsearch j-navbar-search"></i>
+      
+    </div>
+    <div class="center">springboot2.0 mybatis 使用多数据源</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="https://www.winterchen.com " target="_blank" rel="noopener" class="underline "> 主页</a>
+      </li><li class="menu-item">
+        <a href="/ " class="underline "> 博客首页</a>
+      </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 摄影</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="https://images.unsplash.com/photo-1496737018672-b1a6be2e949c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f0aa3d84be0ad9a656a27a318f055ee9&auto=format&fit=crop&w=2691&q=80" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">springboot2.0 mybatis 使用多数据源</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>May 30, 2018</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>17771</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+          <p><p><img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046463697426.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">多数据源</span><br>springboot2.0正式版发布之后，很多的组件集成需要变更了，这次将多数据源的使用踩的坑给大家填一填。当前多数据源的主要为主从库，读写分离，动态切换数据源。使用的技术就是AOP进行dao方法的切面，所以大家的方法名开头都需要按照规范进行编写，如：<code>get***</code>、<code>add***</code> 等等，</p></p>
+        
+        <h2 id="起步基础"><a href="#起步基础" class="headerlink" title="起步基础"></a>起步基础</h2><p>本次的教程需要有springboot2.0集成mybatis 作为基础：</p>
+<ul>
+<li><p>博客地址：<a href="https://blog.csdn.net/Winter_chen001/article/details/80010967" target="_blank" rel="noopener">springboot2.0 Mybatis 整合 (springboot2.0版本)</a></p>
+</li>
+<li><p>基础项目源码：<a href="https://github.com/WinterChenS/springboot2-mybatis-demo" target="_blank" rel="noopener">https://github.com/WinterChenS/springboot2-mybatis-demo</a></p>
+</li>
+</ul>
+<p>需要以上的步骤作为基础，运行成功之后可就可以开始配置多数据源了</p>
+<h2 id="开始动手"><a href="#开始动手" class="headerlink" title="开始动手"></a>开始动手</h2><h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">&lt;dependency&gt;<br>  &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;<br>  &lt;artifactId&gt;spring-boot-starter-aop&lt;&#x2F;artifactId&gt;<br>&lt;&#x2F;dependency&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="修改启动类"><a href="#修改启动类" class="headerlink" title="修改启动类"></a>修改启动类</h3><p>修改之前：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-meta">@MapperScan</span>(<span class="hljs-string">"com.winterchen.dao"</span>)<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpringBootMybatisMutilDatabaseApplication</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        SpringApplication.run(SpringBootMybatisMutilDatabaseApplication<span class="hljs-class">.<span class="hljs-keyword">class</span>, <span class="hljs-title">args</span>)</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>修改之后：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpringBootMybatisMutilDatabaseApplication</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        SpringApplication.run(SpringBootMybatisMutilDatabaseApplication<span class="hljs-class">.<span class="hljs-keyword">class</span>, <span class="hljs-title">args</span>)</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>因为改用多数据源，所以dao接口的扫描我们放在配置类中进行</p>
+<h3 id="修改项目配置"><a href="#修改项目配置" class="headerlink" title="修改项目配置"></a>修改项目配置</h3><p>首先我们需要在配置文件中配置多数据源，看一下原本项目的配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>    <span class="hljs-attr">datasource:</span><br>        <span class="hljs-attr">name:</span> <span class="hljs-string">mysql_test</span><br>        <span class="hljs-comment">#-----------------start-----------------#  （1）</span><br>        <span class="hljs-attr">type:</span> <span class="hljs-string">com.alibaba.druid.pool.DruidDataSource</span><br>        <span class="hljs-comment">#-----------------end-----------------#</span><br>        <span class="hljs-comment">#druid相关配置</span><br>        <span class="hljs-attr">druid:</span><br>          <span class="hljs-comment">#监控统计拦截的filters</span><br>          <span class="hljs-attr">filters:</span> <span class="hljs-string">stat</span><br>          <span class="hljs-comment">#-----------------start-----------------# （2）</span><br>          <span class="hljs-attr">driver-class-name:</span> <span class="hljs-string">com.mysql.jdbc.Driver</span><br>          <span class="hljs-comment">#基本属性</span><br>          <span class="hljs-attr">url:</span> <span class="hljs-string">jdbc:mysql://127.0.0.1:3306/mytest?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true</span><br>          <span class="hljs-attr">username:</span> <span class="hljs-string">root</span><br>          <span class="hljs-attr">password:</span> <span class="hljs-string">root</span><br>           <span class="hljs-comment">#-----------------end-----------------#</span><br>          <span class="hljs-comment">#配置初始化大小/最小/最大</span><br>          <span class="hljs-attr">initial-size:</span> <span class="hljs-number">1</span><br>          <span class="hljs-attr">min-idle:</span> <span class="hljs-number">1</span><br>          <span class="hljs-attr">max-active:</span> <span class="hljs-number">20</span><br>          <span class="hljs-comment">#获取连接等待超时时间</span><br>          <span class="hljs-attr">max-wait:</span> <span class="hljs-number">60000</span><br>          <span class="hljs-comment">#间隔多久进行一次检测，检测需要关闭的空闲连接</span><br>          <span class="hljs-attr">time-between-eviction-runs-millis:</span> <span class="hljs-number">60000</span><br>          <span class="hljs-comment">#一个连接在池中最小生存的时间</span><br>          <span class="hljs-attr">min-evictable-idle-time-millis:</span> <span class="hljs-number">300000</span><br>          <span class="hljs-attr">validation-query:</span> <span class="hljs-string">SELECT</span> <span class="hljs-string">'x'</span><br>          <span class="hljs-attr">test-while-idle:</span> <span class="hljs-literal">true</span><br>          <span class="hljs-attr">test-on-borrow:</span> <span class="hljs-literal">false</span><br>          <span class="hljs-attr">test-on-return:</span> <span class="hljs-literal">false</span><br>          <span class="hljs-comment">#打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false</span><br>          <span class="hljs-attr">pool-prepared-statements:</span> <span class="hljs-literal">false</span><br>          <span class="hljs-attr">max-pool-prepared-statement-per-connection-size:</span> <span class="hljs-number">20</span><br></code></pre></td></tr></table></figure>
+
+<p>*<em>需要修改的地方: *</em></p>
+<ul>
+<li><p>(1) 需要将 <code>type: com.alibaba.druid.pool.DruidDataSource</code>去除；</p>
+</li>
+<li><p>(2) 将关于数据库的连接信息: <code>driver-class-name</code>、<code>url</code>、<code>username</code> 、<code>password</code>  去除；</p>
+</li>
+</ul>
+<p><strong>修改后：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>    <span class="hljs-attr">datasource:</span><br>        <span class="hljs-attr">name:</span> <span class="hljs-string">mysql_test</span><br>        <span class="hljs-comment">#-------------- start ----------------# (1)</span><br>        <span class="hljs-attr">master:</span><br>          <span class="hljs-comment">#基本属性--注意，这里的为【jdbcurl】-- 默认使用HikariPool作为数据库连接池</span><br>          <span class="hljs-attr">jdbcurl:</span> <span class="hljs-string">jdbc:mysql://127.0.0.1:3306/mytest?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true</span><br>          <span class="hljs-attr">username:</span> <span class="hljs-string">root</span><br>          <span class="hljs-attr">password:</span> <span class="hljs-string">root</span><br>          <span class="hljs-attr">driver-class-name:</span> <span class="hljs-string">com.mysql.jdbc.Driver</span><br>        <span class="hljs-attr">slave:</span><br>          <span class="hljs-comment">#基本属性--注意，这里为 【url】-- 使用 druid 作为数据库连接池</span><br>          <span class="hljs-attr">url:</span> <span class="hljs-string">jdbc:mysql://127.0.0.1:3306/mytest?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true</span><br>          <span class="hljs-attr">username:</span> <span class="hljs-string">root</span><br>          <span class="hljs-attr">password:</span> <span class="hljs-string">root</span><br>          <span class="hljs-attr">driver-class-name:</span> <span class="hljs-string">com.mysql.jdbc.Driver</span><br>        <span class="hljs-attr">read:</span> <span class="hljs-string">get,select,count,list,query,find</span><br>        <span class="hljs-attr">write:</span> <span class="hljs-string">add,create,update,delete,remove,insert</span><br>        <span class="hljs-comment">#-------------- end ----------------#</span><br>        <span class="hljs-comment">#druid相关配置</span><br>        <span class="hljs-attr">druid:</span><br>          <span class="hljs-comment">#监控统计拦截的filters</span><br>          <span class="hljs-attr">filters:</span> <span class="hljs-string">stat,wall</span><br>          <span class="hljs-comment">#配置初始化大小/最小/最大</span><br>          <span class="hljs-attr">initial-size:</span> <span class="hljs-number">1</span><br>          <span class="hljs-attr">min-idle:</span> <span class="hljs-number">1</span><br>          <span class="hljs-attr">max-active:</span> <span class="hljs-number">20</span><br>          <span class="hljs-comment">#获取连接等待超时时间</span><br>          <span class="hljs-attr">max-wait:</span> <span class="hljs-number">60000</span><br>          <span class="hljs-comment">#间隔多久进行一次检测，检测需要关闭的空闲连接</span><br>          <span class="hljs-attr">time-between-eviction-runs-millis:</span> <span class="hljs-number">60000</span><br>          <span class="hljs-comment">#一个连接在池中最小生存的时间</span><br>          <span class="hljs-attr">min-evictable-idle-time-millis:</span> <span class="hljs-number">300000</span><br>          <span class="hljs-attr">validation-query:</span> <span class="hljs-string">SELECT</span> <span class="hljs-string">'x'</span><br>          <span class="hljs-attr">test-while-idle:</span> <span class="hljs-literal">true</span><br>          <span class="hljs-attr">test-on-borrow:</span> <span class="hljs-literal">false</span><br>          <span class="hljs-attr">test-on-return:</span> <span class="hljs-literal">false</span><br>          <span class="hljs-comment">#打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false</span><br>          <span class="hljs-attr">pool-prepared-statements:</span> <span class="hljs-literal">false</span><br>          <span class="hljs-attr">max-pool-prepared-statement-per-connection-size:</span> <span class="hljs-number">20</span><br></code></pre></td></tr></table></figure>
+
+<p>需要修改地方：</p>
+<ul>
+<li>(1) 在如上的配置中添加<code>master</code>、<code>slave</code>两个数据源;</li>
+</ul>
+<p><strong>注意！！</strong>两中数据源中有一处是不一样的，原因是因为<code>master</code>数据源使用 <code>Hikari</code>连接池，<code>slave</code>使用的是<code>druid</code>作为数据库连接池，所以两处的配置分别为：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">master:</span><br>    <span class="hljs-attr">jdbcurl:</span> <span class="hljs-string">jdbc:mysql://127.0.0.1:3306/mytest?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">slave:</span><br>    <span class="hljs-attr">url:</span> <span class="hljs-string">jdbc:mysql://127.0.0.1:3306/mytest?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true</span><br></code></pre></td></tr></table></figure>
+
+<p>数据库的连接不一样的，如果配置成一样的会在启动的时候报错。</p>
+<p><strong>注意！！</strong></p>
+<p>dao接口方法的方法名规则配置在这里了，当然可以自行更改：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">read:</span> <span class="hljs-string">get,select,count,list,query,find</span><br><span class="hljs-attr">write:</span> <span class="hljs-string">add,create,update,delete,remove,insert</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="创建配置包"><a href="#创建配置包" class="headerlink" title="创建配置包"></a>创建配置包</h3><p>首先在项目的<code>/src/main/java/com/winterchen/</code>包下创建<code>config</code>包</p>
+<p><img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046463787428.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">创建config包</span></p>
+<h3 id="创建数据源类型的枚举DatabaseType"><a href="#创建数据源类型的枚举DatabaseType" class="headerlink" title="创建数据源类型的枚举DatabaseType"></a>创建数据源类型的枚举DatabaseType</h3><p>该枚举类主要用来区分读写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen.config;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 列出数据源类型</span><br><span class="hljs-comment"> * Created by Donghua.Chen on 2018/5/29.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">enum</span> DatabaseType &#123;<br><br>    master(<span class="hljs-string">"write"</span>), slave(<span class="hljs-string">"read"</span>);<br><br><br>    DatabaseType(String name) &#123;<br>        <span class="hljs-keyword">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> String name;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"DatabaseType&#123;"</span> +<br>                <span class="hljs-string">"name='"</span> + name + <span class="hljs-string">'\''</span> +<br>                <span class="hljs-string">'&#125;'</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="创建线程安全的DatabaseType容器"><a href="#创建线程安全的DatabaseType容器" class="headerlink" title="创建线程安全的DatabaseType容器"></a>创建线程安全的DatabaseType容器</h3><p>多数据源必须要保证数据源的线程安全的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.winterchen.config;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 保存一个线程安全的DatabaseType容器</span><br><span class="hljs-comment"> * Created by Donghua.Chen on 2018/5/29.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DatabaseContextHolder</span> </span>&#123;<br><br>        <span class="hljs-comment">//用于存放多线程环境下的成员变量</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> ThreadLocal&lt;DatabaseType&gt; contextHolder = <span class="hljs-keyword">new</span> ThreadLocal&lt;&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setDatabaseType</span><span class="hljs-params">(DatabaseType type)</span> </span>&#123;<br>        contextHolder.set(type);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> DatabaseType <span class="hljs-title">getDatabaseType</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> contextHolder.get();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="创建动态数据源"><a href="#创建动态数据源" class="headerlink" title="创建动态数据源"></a>创建动态数据源</h3><p>实现数据源切换的功能就是自定义一个类扩展AbstractRoutingDataSource抽象类，其实该相当于数据源DataSource的路由中介，可以实现在项目运行时根据相应key值切换到对应的数据源DataSource上，有兴趣的同学可以看看它的源码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DynamicDataSource</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractRoutingDataSource</span> </span>&#123;<br><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Map&lt;DatabaseType, List&lt;String&gt;&gt; METHOD_TYPE_MAP = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br><br><br>    <span class="hljs-meta">@Nullable</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> Object <span class="hljs-title">determineCurrentLookupKey</span><span class="hljs-params">()</span> </span>&#123;<br>        DatabaseType type = DatabaseContextHolder.getDatabaseType();<br>        logger.info(<span class="hljs-string">"====================dataSource =========="</span> + type);<br>        <span class="hljs-keyword">return</span> type;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setMethodType</span><span class="hljs-params">(DatabaseType type, String content)</span> </span>&#123;<br>        List&lt;String&gt; list = Arrays.asList(content.split(<span class="hljs-string">","</span>));<br>        METHOD_TYPE_MAP.put(type, list);<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="创建数据源配置类DataSourceConfig"><a href="#创建数据源配置类DataSourceConfig" class="headerlink" title="创建数据源配置类DataSourceConfig"></a>创建数据源配置类DataSourceConfig</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-meta">@MapperScan</span>(<span class="hljs-string">"com.winterchen.dao"</span>)<br><span class="hljs-meta">@EnableTransactionManagement</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DataSourceConfig</span> </span>&#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Logger logger = LoggerFactory.getLogger(DataSourceConfig<span class="hljs-class">.<span class="hljs-keyword">class</span>)</span>;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> Environment env;  <span class="hljs-comment">// (1)</span><br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> DataSourceProperties properties;  <span class="hljs-comment">// (2)</span><br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.filters&#125;"</span>)   <span class="hljs-comment">// (3)</span><br>    <span class="hljs-keyword">private</span> String filters;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.initial-size&#125;"</span>)<br>    <span class="hljs-keyword">private</span> Integer initialSize;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.min-idle&#125;"</span>)<br>    <span class="hljs-keyword">private</span> Integer minIdle;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.max-active&#125;"</span>)<br>    <span class="hljs-keyword">private</span> Integer maxActive;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.max-wait&#125;"</span>)<br>    <span class="hljs-keyword">private</span> Integer maxWait;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.time-between-eviction-runs-millis&#125;"</span>)<br>    <span class="hljs-keyword">private</span> Long timeBetweenEvictionRunsMillis;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.min-evictable-idle-time-millis&#125;"</span>)<br>    <span class="hljs-keyword">private</span> Long minEvictableIdleTimeMillis;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.validation-query&#125;"</span>)<br>    <span class="hljs-keyword">private</span> String validationQuery;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.test-while-idle&#125;"</span>)<br>    <span class="hljs-keyword">private</span> Boolean testWhileIdle;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.test-on-borrow&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> testOnBorrow;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.test-on-return&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> testOnReturn;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.pool-prepared-statements&#125;"</span>)<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> poolPreparedStatements;<br><br>    <span class="hljs-meta">@Value</span>(<span class="hljs-string">"$&#123;spring.datasource.druid.max-pool-prepared-statement-per-connection-size&#125;"</span>)<br>    <span class="hljs-keyword">private</span> Integer maxPoolPreparedStatementPerConnectionSize;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 通过Spring JDBC 快速创建 DataSource</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Bean</span>(name = <span class="hljs-string">"masterDataSource"</span>)<br>    <span class="hljs-meta">@Qualifier</span>(<span class="hljs-string">"masterDataSource"</span>)<br>    <span class="hljs-meta">@ConfigurationProperties</span>(prefix = <span class="hljs-string">"spring.datasource.master"</span>)  <span class="hljs-comment">// (4)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> DataSource <span class="hljs-title">masterDataSource</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> DataSourceBuilder.create().build();<br>    &#125;<br><br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 手动创建DruidDataSource,通过DataSourceProperties 读取配置</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     * <span class="hljs-doctag">@throws</span> SQLException</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Bean</span>(name = <span class="hljs-string">"slaveDataSource"</span>)<br>    <span class="hljs-meta">@Qualifier</span>(<span class="hljs-string">"slaveDataSource"</span>)<br>    <span class="hljs-meta">@ConfigurationProperties</span>(prefix = <span class="hljs-string">"spring.datasource.slave"</span>)<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> DataSource <span class="hljs-title">slaveDataSource</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> SQLException </span>&#123;<br>        DruidDataSource dataSource = <span class="hljs-keyword">new</span> DruidDataSource();<br>        dataSource.setFilters(filters);<br>        dataSource.setUrl(properties.getUrl());<br>        dataSource.setDriverClassName(properties.getDriverClassName());<br>        dataSource.setUsername(properties.getUsername());<br>        dataSource.setPassword(properties.getPassword());<br>        dataSource.setInitialSize(initialSize);<br>        dataSource.setMinIdle(minIdle);<br>        dataSource.setMaxActive(maxActive);<br>        dataSource.setMaxWait(maxWait);<br>        dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);<br>        dataSource.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);<br>        dataSource.setValidationQuery(validationQuery);<br>        dataSource.setTestWhileIdle(testWhileIdle);<br>        dataSource.setTestOnBorrow(testOnBorrow);<br>        dataSource.setTestOnReturn(testOnReturn);<br>        dataSource.setPoolPreparedStatements(poolPreparedStatements);<br>        dataSource.setMaxPoolPreparedStatementPerConnectionSize(maxPoolPreparedStatementPerConnectionSize);<br>        <span class="hljs-keyword">return</span> dataSource;<br>    &#125;<br><br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     *  构造多数据源连接池</span><br><span class="hljs-comment">     *  Master 数据源连接池采用 HikariDataSource</span><br><span class="hljs-comment">     *  Slave  数据源连接池采用 DruidDataSource</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> master</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> slave</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-meta">@Primary</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> DynamicDataSource <span class="hljs-title">dataSource</span><span class="hljs-params">(@Qualifier(<span class="hljs-string">"masterDataSource"</span>)</span> DataSource master,</span><br><span class="hljs-function">                                        @<span class="hljs-title">Qualifier</span><span class="hljs-params">(<span class="hljs-string">"slaveDataSource"</span>)</span> DataSource slave) </span>&#123;<br>        Map&lt;Object, Object&gt; targetDataSources = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br>        targetDataSources.put(DatabaseType.master, master);<br>        targetDataSources.put(DatabaseType.slave, slave);<br><br>        DynamicDataSource dataSource = <span class="hljs-keyword">new</span> DynamicDataSource();<br>        dataSource.setTargetDataSources(targetDataSources);<span class="hljs-comment">// 该方法是AbstractRoutingDataSource的方法</span><br>        dataSource.setDefaultTargetDataSource(slave);<span class="hljs-comment">// 默认的datasource设置为myTestDbDataSource</span><br><br>        String read = env.getProperty(<span class="hljs-string">"spring.datasource.read"</span>);<br>        dataSource.setMethodType(DatabaseType.slave, read);<br><br>        String write = env.getProperty(<span class="hljs-string">"spring.datasource.write"</span>);<br>        dataSource.setMethodType(DatabaseType.master, write);<br><br>        <span class="hljs-keyword">return</span> dataSource;<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> SqlSessionFactory <span class="hljs-title">sqlSessionFactory</span><span class="hljs-params">(@Qualifier(<span class="hljs-string">"masterDataSource"</span>)</span> DataSource myTestDbDataSource,</span><br><span class="hljs-function">                                               @<span class="hljs-title">Qualifier</span><span class="hljs-params">(<span class="hljs-string">"slaveDataSource"</span>)</span> DataSource myTestDb2DataSource) <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        SqlSessionFactoryBean fb = <span class="hljs-keyword">new</span> SqlSessionFactoryBean();<br>        fb.setDataSource(<span class="hljs-keyword">this</span>.dataSource(myTestDbDataSource, myTestDb2DataSource));<br>        fb.setTypeAliasesPackage(env.getProperty(<span class="hljs-string">"mybatis.type-aliases-package"</span>));<br>        fb.setMapperLocations(<span class="hljs-keyword">new</span> PathMatchingResourcePatternResolver().getResources(env.getProperty(<span class="hljs-string">"mybatis.mapper-locations"</span>)));<br>        <span class="hljs-keyword">return</span> fb.getObject();<br>    &#125;<br><br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> DataSourceTransactionManager <span class="hljs-title">transactionManager</span><span class="hljs-params">(DynamicDataSource dataSource)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> DataSourceTransactionManager(dataSource);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>以上的代码中：</p>
+<ul>
+<li><p>(1)  注入类 <code>Environment</code> 可以很方便的获取配置文件中的参数</p>
+</li>
+<li><p>(2)  <code>DataSourceProperties</code>和（4）中的 <code>@ConfigurationProperties(prefix = &quot;spring.datasource.master&quot;)</code>配合使用，将配置文件中的配置数据自动封装到实体类<code>DataSourceProperties</code>中</p>
+</li>
+<li><p>(3) <code>@Value</code>注解同样是指定获取配置文件中的配置;</p>
+</li>
+</ul>
+<p>更详细的配置大家可以参考官方文档。</p>
+<h3 id="配置AOP"><a href="#配置AOP" class="headerlink" title="配置AOP"></a>配置AOP</h3><p>本章的开头已经说过，多数据源动态切换的原理是利用AOP切面进行动态的切换的，当调用<code>dao</code>接口方法时，根据接口方法的方法名开头进行区分读写。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * 动态处理数据源，根据命名区分</span><br><span class="hljs-comment"> * Created by Donghua.Chen on 2018/5/29.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Aspect</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-meta">@EnableAspectJAutoProxy</span>(proxyTargetClass = <span class="hljs-keyword">true</span>)<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DataSourceAspect</span> </span>&#123;<br><br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Logger logger = LoggerFactory.getLogger(DataSourceAspect<span class="hljs-class">.<span class="hljs-keyword">class</span>)</span>;<br><br>    <span class="hljs-meta">@Pointcut</span>(<span class="hljs-string">"execution(* com.winterchen.dao.*.*(..))"</span>)<span class="hljs-comment">//切点</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">aspect</span><span class="hljs-params">()</span> </span>&#123;<br><br>    &#125;<br><br><br>    <span class="hljs-meta">@Before</span>(<span class="hljs-string">"aspect()"</span>)<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">before</span><span class="hljs-params">(JoinPoint point)</span> </span>&#123; <span class="hljs-comment">//在指定切点的方法之前执行</span><br>        String className = point.getTarget().getClass().getName();<br>        String method = point.getSignature().getName();<br>        String args = StringUtils.join(point.getArgs(), <span class="hljs-string">","</span>);<br>        logger.info(<span class="hljs-string">"className:&#123;&#125;, method:&#123;&#125;, args:&#123;&#125; "</span>, className, method, args);<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">for</span> (DatabaseType type : DatabaseType.values()) &#123;<br>                List&lt;String&gt; values = DynamicDataSource.METHOD_TYPE_MAP.get(type);<br>                <span class="hljs-keyword">for</span> (String key : values) &#123;<br>                    <span class="hljs-keyword">if</span> (method.startsWith(key)) &#123;<br>                        logger.info(<span class="hljs-string">"&gt;&gt;&#123;&#125; 方法使用的数据源为:&#123;&#125;&lt;&lt;"</span>, method, key);<br>                        DatabaseContextHolder.setDatabaseType(type);<br>                        DatabaseType types = DatabaseContextHolder.getDatabaseType();<br>                        logger.info(<span class="hljs-string">"&gt;&gt;&#123;&#125;方法使用的数据源为:&#123;&#125;&lt;&lt;"</span>, method, types);<br>                    &#125;<br>                &#125;<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            logger.error(e.getMessage(), e);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如上可以看到，切点切在<code>dao</code>的接口方法中，根据接口方法的方法名进行匹配数据源，然后将数据源set到用于存放数据源线程安全的容器中；</p>
+<p>完整的项目结构了解一下：</p>
+<p><img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046463912428.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">完整项目结构</span></p>
+<h2 id="项目启动"><a href="#项目启动" class="headerlink" title="项目启动"></a>项目启动</h2><p>启动成功：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plain">2018-05-30 17:27:16.492  INFO 35406 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean &#39;masterDataSource&#39;: registering with JMX server as MBean [com.zaxxer.hikari:name&#x3D;masterDataSource,type&#x3D;HikariDataSource]<br>2018-05-30 17:27:16.496  INFO 35406 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean &#39;slaveDataSource&#39;: registering with JMX server as MBean [com.alibaba.druid.pool:name&#x3D;slaveDataSource,type&#x3D;DruidDataSource]<br>2018-05-30 17:27:16.498  INFO 35406 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean &#39;statFilter&#39;: registering with JMX server as MBean [com.alibaba.druid.filter.stat:name&#x3D;statFilter,type&#x3D;StatFilter]<br>2018-05-30 17:27:16.590  INFO 35406 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path &#39;&#39;<br>2018-05-30 17:27:16.598  INFO 35406 --- [           main] pringBootMybatisMutilDatabaseApplication : Started SpringBootMybatisMutilDatabaseApplication in 11.523 seconds (JVM running for 13.406)<br></code></pre></td></tr></table></figure>
+
+<p>添加用户（write）：</p>
+<p><img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046464083964.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">添加用户</span></p>
+<p>日志：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs plain">2018-05-30 17:29:07.347  INFO 35406 --- [nio-8080-exec-1] com.winterchen.config.DataSourceAspect   : className:com.sun.proxy.$Proxy73, method:insert, args:com.winterchen.model.UserDomain@4b5b52dc<br>2018-05-30 17:29:07.350  INFO 35406 --- [nio-8080-exec-1] com.winterchen.config.DataSourceAspect   : &gt;&gt;insert 方法使用的数据源为:insert&lt;&lt;<br>2018-05-30 17:29:07.351  INFO 35406 --- [nio-8080-exec-1] com.winterchen.config.DataSourceAspect   : &gt;&gt;insert方法使用的数据源为:DatabaseType&#123;name&#x3D;&#39;write&#39;&#125;&lt;&lt;<br>2018-05-30 17:29:07.461  INFO 35406 --- [nio-8080-exec-1] com.winterchen.config.DynamicDataSource  : &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;dataSource &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;DatabaseType&#123;name&#x3D;&#39;write&#39;&#125;<br>2018-05-30 17:29:07.462  INFO 35406 --- [nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...<br>2018-05-30 17:29:07.952  INFO 35406 --- [nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.<br></code></pre></td></tr></table></figure>
+
+<p>可以看出使用的就是<code>write</code>数据源，并且该数据源是使用<code>HikariPool</code>作为数据库连接池的</p>
+<p>查询用户（read）：</p>
+<p><img    class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/img/posts/1628046464129009.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">查询用户</span></p>
+<p>日志：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plain">2018-05-30 17:29:41.616  INFO 35406 --- [nio-8080-exec-2] com.winterchen.config.DataSourceAspect   : className:com.sun.proxy.$Proxy73, method:selectUsers, args:<br>2018-05-30 17:29:41.618  INFO 35406 --- [nio-8080-exec-2] com.winterchen.config.DataSourceAspect   : &gt;&gt;selectUsers 方法使用的数据源为:select&lt;&lt;<br>2018-05-30 17:29:41.618  INFO 35406 --- [nio-8080-exec-2] com.winterchen.config.DataSourceAspect   : &gt;&gt;selectUsers方法使用的数据源为:DatabaseType&#123;name&#x3D;&#39;read&#39;&#125;&lt;&lt;<br>2018-05-30 17:29:41.693  INFO 35406 --- [nio-8080-exec-2] com.winterchen.config.DynamicDataSource  : &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;dataSource &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;DatabaseType&#123;name&#x3D;&#39;read&#39;&#125;<br>2018-05-30 17:29:41.982  INFO 35406 --- [nio-8080-exec-2] com.alibaba.druid.pool.DruidDataSource   : &#123;dataSource-1&#125; inited<br></code></pre></td></tr></table></figure>
+
+<p>可以看出使用的是<code>read</code>数据源。</p>
+<p>源码地址：<a href="https://github.com/WinterChenS/springboot-learning-experience/tree/master/spring-boot-mybatis-mutil-database" target="_blank" rel="noopener">戳这里</a></p>
+<p>springboot技术交流群：681513531</p>
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>winter chen</li>
+    <li><strong>本文链接：</strong><a href="https://blog.winterchen.com/2018/05/30/spring-boot-mybatis-mutil-database/index.html" title="https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2018&#x2F;05&#x2F;30&#x2F;spring-boot-mybatis-mutil-database&#x2F;index.html">https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2018&#x2F;05&#x2F;30&#x2F;spring-boot-mybatis-mutil-database&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/" rel="tag">mybatis</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a href="/2018/06/09/2018-06-09-pretty-gril/"><i class="iconfont iconleft"></i>犹豫的眼神</a>
+    <a href="/2018/05/30/centos7-install-nginx/">如何在CentOS 7上安装和配置Nginx<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+    <div class="btn" id="comments-btn">查看评论</div>
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk" class="gitalk"></div>
+<script defer src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  window.onload = function () {
+    var gitalk = new Gitalk({
+      clientID: '77f2adc33e0112d086d7',
+      clientSecret: 'e926aa3a621556609b2c2b76d89320fa524e23cd',
+      id: window.location.pathname,
+      repo: 'WinterChenS.github.io',
+      owner: 'WinterChenS',
+      admin: 'WinterChenS'
+    });
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        gitalk.render('gitalk');
+      });
+    } else {
+      gitalk.render('gitalk');
+    }
+  }
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#起步基础"><span class="toc-text">起步基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始动手"><span class="toc-text">开始动手</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#添加依赖"><span class="toc-text">添加依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改启动类"><span class="toc-text">修改启动类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改项目配置"><span class="toc-text">修改项目配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建配置包"><span class="toc-text">创建配置包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据源类型的枚举DatabaseType"><span class="toc-text">创建数据源类型的枚举DatabaseType</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建线程安全的DatabaseType容器"><span class="toc-text">创建线程安全的DatabaseType容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建动态数据源"><span class="toc-text">创建动态数据源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据源配置类DataSourceConfig"><span class="toc-text">创建数据源配置类DataSourceConfig</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置AOP"><span class="toc-text">配置AOP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#项目启动"><span class="toc-text">项目启动</span></a></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="https://github.com/winterchens "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:i@winterchen.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+    <div class="search">
+  <div class="search-container">
+    <div class="search-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <div class="search-input-wrapper">
+      <i class="search-input-icon iconfont iconsearch"></i>
+      <input class="search-input" type="search" id="search-input" placeholder="Search..." autofocus autocomplete="off"
+        autocorrect="off" autocapitalize="off">
+    </div>
+    <div class="search-output" id="search-output"></div>
+  </div>
+</div>
+  
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <script>
+    window.ga = window.ga || function () {
+      (ga.q = ga.q || []).push(arguments)
+    };
+    ga.l = +new Date;
+    ga('create', 'UA-155319408-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script defer src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script>
+    var _mtac = {};
+    (function () {
+      var mta = document.createElement("script");
+      mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "500722607");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+
+
+
+</html>

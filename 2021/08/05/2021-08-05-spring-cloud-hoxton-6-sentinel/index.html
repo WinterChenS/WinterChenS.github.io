@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-Hans" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>SpringCloud系列教程(六)之SpringCloud 使用sentinel作为熔断器 - Luis Blog</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content="java,spring,springboot,springcloud,mybatis,jQuery,html,css, springcloud">
+  <meta name="description" content="
+阅读提醒：
+
+
+本文面向的是有一定springboo...">
+  <meta name="author" content="winter chen">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xt256.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: '',
+        wechat: ''
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: false
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://gitee.com/winter_chen/img/raw/master/blog/20210413131918.jpeg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: true,
+        path: '/search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+        <i class="iconfont iconsearch j-navbar-search"></i>
+      
+    </div>
+    <div class="center">SpringCloud系列教程(六)之SpringCloud 使用sentinel作为熔断器</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="https://www.winterchen.com " target="_blank" rel="noopener" class="underline "> 主页</a>
+      </li><li class="menu-item">
+        <a href="/ " class="underline "> 博客首页</a>
+      </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 摄影</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210805100552.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">SpringCloud系列教程(六)之SpringCloud 使用sentinel作为熔断器</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>August 05, 2021</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>9212</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <blockquote>
+<p>阅读提醒：</p>
+</blockquote>
+<ol>
+<li>本文面向的是有一定springboot基础者</li>
+<li>本次教程使用的Spring Cloud Hoxton RELEASE版本</li>
+<li>由于knife4j比swagger更加友好，所以本文集成knife4j</li>
+<li>本文依赖上一篇的工程，请查看上一篇文章以做到无缝衔接，或者直接下载源码：<a href="https://github.com/WinterChenS/spring-cloud-hoxton-study" target="_blank" rel="noopener">https://github.com/WinterChenS/spring-cloud-hoxton-study</a></li>
+</ol>
+<h2 id="前情概要"><a href="#前情概要" class="headerlink" title="前情概要"></a>前情概要</h2><ul>
+<li><a href="https://juejin.cn/post/6987998097209032741" target="_blank" rel="noopener">SpringCloud系列教程(一)开篇</a></li>
+<li><a href="https://juejin.cn/post/6991323018802757662" target="_blank" rel="noopener">SpringCloud系列教程(二)之Nacos | 8月更文挑战</a></li>
+<li><a href="https://juejin.cn/post/6991635985847025671" target="_blank" rel="noopener">SpringCloud系列教程(三)之Open Feign | 8月更文挑战</a></li>
+<li><a href="https://juejin.cn/post/6992010061576929310" target="_blank" rel="noopener">SpringCloud系列教程(四)之SpringCloud Gateway | 8月更文挑战</a></li>
+<li><a href="https://juejin.cn/post/6992404611617259534" target="_blank" rel="noopener">SpringCloud系列教程(五)之SpringCloud Gateway 网关聚合开发文档 swagger knife4j 和登录权限统一验证</a></li>
+</ul>
+<h2 id="本文概览"><a href="#本文概览" class="headerlink" title="本文概览"></a>本文概览</h2><ul>
+<li>什么是熔断器</li>
+<li>什么是sentinel</li>
+<li>spring cloud 整合sentinel</li>
+<li>实际的应用场景</li>
+</ul>
+<h2 id="什么是熔断器"><a href="#什么是熔断器" class="headerlink" title="什么是熔断器"></a>什么是熔断器</h2><p>想必大家都知道一个生活中常见的物件，保险丝，其实它就是一种熔断器，当电器出现短路故障导致瞬间电流超过瞬间值会触发熔断，导致断开电路，从而保护了整个电路和电器的安全。</p>
+<p><strong>熔断器（fuse）</strong>是指当电流超过规定值时，以本身产生的热量使熔体熔断，断开电路的一种电器。熔断器是根据电流超过规定值一段时间后，以其自身产生的热量使熔体熔化，从而使电路断开；运用这种原理制成的一种电流保护器。熔断器广泛应用于高低压配电系统和控制系统以及用电设备中，作为短路和过电流的保护器，是应用最普遍的保护器件之一。</p>
+<p>可能就有同学要问了，这个跟我们说的服务的熔断器有什么关系呢？其实很多原理性的事物都跟生活息息相关的，电路的熔断，保护电路和电器。在代码的世界里，可以对服务起到流量控制和降级熔断的能力，可以做到部分服务的宕机不会导致整个服务集群的雪崩。</p>
+<h2 id="什么是sentinel"><a href="#什么是sentinel" class="headerlink" title="什么是sentinel"></a>什么是sentinel</h2><p>sentinel是阿里巴巴开源的服务治理的框架，sentinel中文译名为哨兵，是为微服务提供流量控制、熔断降级的功能，它和Hystrix提供的功能一样，可以有效的解决微服务调用产生的“雪崩”效应，为微服务系统提供了稳定性的解决方案。</p>
+<p>随着Hytrxi进入了维护期，不再提供新功能，Sentinel是一个不错的替代方案。通常情况，Hystrix采用线程池对服务的调用进行隔离，Sentinel才用了用户线程对接口进行隔离，二者相比，Hystrxi是服务级别的隔离，Sentinel提供了接口级别的隔离，Sentinel隔离级别更加精细，另外Sentinel直接使用用户线程进行限制，相比Hystrix的线程池隔离，减少了线程切换的开销。另外Sentinel的DashBoard提供了在线更改限流规则的配置，也更加的优化。</p>
+<p>通过官方文档的介绍，sentinel有以下特征：</p>
+<ul>
+<li>丰富的应用场景： Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统容量可以承受的范围）、消息削峰填谷、实时熔断下游不可用应用等。</li>
+<li>完备的实时监控： Sentinel 同时提供实时的监控功能。您可以在控制台中看到接入应用的单台机器秒级数据，甚至 500 台以下规模的集群的汇总运行情况。</li>
+<li>广泛的开源生态： Sentinel 提供开箱即用的与其它开源框架/库的整合模块，例如与 Spring Cloud、Dubbo、gRPC 的整合。您只需要引入相应的依赖并进行简单的配置即可快速地接入 Sentinel。</li>
+<li>完善的 SPI 扩展点： Sentinel 提供简单易用、完善的 SPI 扩展点。您可以通过实现扩展点，快速的定制逻辑。例如定制规则管理、适配数据源等。</li>
+</ul>
+<p>Sentinel的主要特性：</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210805095331.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<h3 id="Sentinel-功能和设计理念"><a href="#Sentinel-功能和设计理念" class="headerlink" title="Sentinel 功能和设计理念"></a>Sentinel 功能和设计理念</h3><p><strong>流量控制</strong></p>
+<p>流量控制在网络传输中是一个常用的概念，它用于调整网络包的发送数据。然而，从系统稳定性角度考虑，在处理请求的速度上，也有非常多的讲究。任意时间到来的请求往往是随机不可控的，而系统的处理能力是有限的。我们需要根据系统的处理能力对流量进行控制。Sentinel 作为一个调配器，可以根据需要把随机的请求调整成合适的形状，如下图所示：</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210805095541.jpeg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>流量控制有以下几个角度:</p>
+<ul>
+<li>资源的调用关系，例如资源的调用链路，资源和资源之间的关系；</li>
+<li>运行指标，例如 QPS、线程池、系统负载等；</li>
+<li>控制的效果，例如直接限流、冷启动、排队等。</li>
+</ul>
+<p>Sentinel 的设计理念是让您自由选择控制的角度，并进行灵活组合，从而达到想要的效果。</p>
+<h3 id="熔断降级"><a href="#熔断降级" class="headerlink" title="熔断降级"></a>熔断降级</h3><p>除了流量控制以外，降低调用链路中的不稳定资源也是 Sentinel 的使命之一。由于调用关系的复杂性，如果调用链路中的某个资源出现了不稳定，最终会导致请求发生堆积。这个问题和 <a href="https://github.com/Netflix/Hystrix/wiki#what-problem-does-hystrix-solve" target="_blank" rel="noopener">Hystrix</a> 里面描述的问题是一样的。</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210805095642.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>Sentinel 和 Hystrix 的原则是一致的: 当调用链路中某个资源出现不稳定，例如，表现为 timeout，异常比例升高的时候，则对这个资源的调用进行限制，并让请求快速失败，避免影响到其它的资源，最终产生雪崩的效果。</p>
+<h3 id="Sentinel-是如何工作的"><a href="#Sentinel-是如何工作的" class="headerlink" title="Sentinel 是如何工作的"></a>Sentinel 是如何工作的</h3><p>Sentinel 的主要工作机制如下：</p>
+<ul>
+<li>对主流框架提供适配或者显示的 API，来定义需要保护的资源，并提供设施对资源进行实时统计和调用链路分析。</li>
+<li>根据预设的规则，结合对资源的实时统计信息，对流量进行控制。同时，Sentinel 提供开放的接口，方便您定义及改变规则。</li>
+<li>Sentinel 提供实时的监控系统，方便您快速了解目前系统的状态。</li>
+</ul>
+<h2 id="Spring-Cloud-整合-Sentinel"><a href="#Spring-Cloud-整合-Sentinel" class="headerlink" title="Spring Cloud 整合 Sentinel"></a>Spring Cloud 整合 Sentinel</h2><blockquote>
+<p>注意：本文整合的工程是基于前几篇文章提供的，所以需要根据前几篇的内容一步步的搭建</p>
+</blockquote>
+<h3 id="下载安装sentinel-dashboard"><a href="#下载安装sentinel-dashboard" class="headerlink" title="下载安装sentinel dashboard"></a>下载安装sentinel dashboard</h3><p>从官方的github仓库下载最新的release版本：<a href="https://github.com/alibaba/Sentinel/releases" target="_blank" rel="noopener">https://github.com/alibaba/Sentinel/releases</a></p>
+<p>下载完之后启动服务，端口为8748，启动命令如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">java -Dserver.port=<span class="hljs-number">8748</span> -Dcsp.sentinel.dashboard.server=localhost:<span class="hljs-number">8748</span> -Dproject.name=sentinel-dashboard -jar sentinel-dashboard-<span class="hljs-number">1.8</span><span class="hljs-number">.2</span>.jar<br></code></pre></td></tr></table></figure>
+
+<p>启动完之后登录控制台：<a href="http://localhost:8748/" target="_blank" rel="noopener">http://localhost:8748</a></p>
+<p>账号：sentinel   密码:   sentinel</p>
+<h3 id="改造工程consumer"><a href="#改造工程consumer" class="headerlink" title="改造工程consumer"></a>改造工程consumer</h3><p>增加maven依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.cloud<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-sentinel<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>修改配置<code>application.yml</code>(只显示部分需要修改的配置)：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">cloud:</span><br>    <span class="hljs-attr">nacos:</span><br>      <span class="hljs-attr">discovery:</span><br>        <span class="hljs-attr">server-addr:</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span><span class="hljs-string">:8848</span><br>    <span class="hljs-attr">sentinel:</span><br>      <span class="hljs-attr">transport:</span><br>        <span class="hljs-attr">port:</span> <span class="hljs-number">18763</span>  <span class="hljs-comment">#1</span><br>        <span class="hljs-attr">dashboard:</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span><span class="hljs-string">:8748</span><br><br><span class="hljs-attr">feign:</span><br>  <span class="hljs-attr">sentinel:</span><br>    <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span> <span class="hljs-comment">#2</span><br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>这里的 <code>spring.cloud.sentinel.transport.port</code> 端口配置会在应用对应的机器上启动一个 Http Server，该 Server 会与 Sentinel 控制台做交互。比如 Sentinel 控制台添加了一个限流规则，会把规则数据 push 给这个 Http Server 接收，Http Server 再将规则注册到 Sentinel 中。</li>
+<li>通过<code>feign.sentinel.enable</code>开启Feign和sentinel的自动适配。</li>
+</ol>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>分别启动provider/consumer/gateway服务，然后<strong>多次请求</strong>: <a href="http://localhost:16011/nacos/feign-test/hello" target="_blank" rel="noopener">http://localhost:16011/nacos/feign-test/hello</a></p>
+<blockquote>
+<p>注意：需要请求接口之后才可以在控制台看到对应的服务和接口。</p>
+</blockquote>
+<p>打开控制台可以看到：</p>
+<p>实时监控：</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210805095343.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>簇点链路：</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210805095425.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>增加流控规则</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210805095437.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>可以通过修改后面的一些控制来限制接口的一些功能，大家可以改一改尝试一下，这里就不赘述了。</p>
+<blockquote>
+<p>可以给其他的服务：provider和auth也按照上面的步骤进行配置。</p>
+</blockquote>
+<h3 id="Spring-Cloud-Gateway使用Sentinel"><a href="#Spring-Cloud-Gateway使用Sentinel" class="headerlink" title="Spring Cloud Gateway使用Sentinel"></a>Spring Cloud Gateway使用Sentinel</h3><p>在工程 gateway中修改</p>
+<p>增加maven依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.cloud<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-sentinel<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.cloud<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-cloud-alibaba-sentinel-gateway<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>修改<code>application.yml</code>配置文件：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">cloud:</span><br>    <span class="hljs-attr">sentinel:</span><br>     <span class="hljs-attr">transport:</span><br>       <span class="hljs-attr">port:</span> <span class="hljs-number">15000</span><br>       <span class="hljs-attr">dashboard:</span> <span class="hljs-string">localhost:8748</span><br></code></pre></td></tr></table></figure>
+
+<p>创建一个网关分组和网关的限流规则：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GatewayConfiguration</span> </span>&#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> List&lt;ViewResolver&gt; viewResolvers;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ServerCodecConfigurer serverCodecConfigurer;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">GatewayConfiguration</span><span class="hljs-params">(ObjectProvider&lt;List&lt;ViewResolver&gt;&gt; viewResolversProvider,</span></span><br><span class="hljs-function"><span class="hljs-params">                                ServerCodecConfigurer serverCodecConfigurer)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.viewResolvers = viewResolversProvider.getIfAvailable(Collections::emptyList);<br>        <span class="hljs-keyword">this</span>.serverCodecConfigurer = serverCodecConfigurer;<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-meta">@Order</span>(Ordered.HIGHEST_PRECEDENCE)<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> SentinelGatewayBlockExceptionHandler <span class="hljs-title">sentinelGatewayBlockExceptionHandler</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">// Register the block exception handler for Spring Cloud Gateway.</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> SentinelGatewayBlockExceptionHandler(viewResolvers, serverCodecConfigurer);<br>    &#125;<br><br>    <span class="hljs-meta">@PostConstruct</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doInit</span><span class="hljs-params">()</span> </span>&#123;<br>        initCustomizedApis();<br>        initGatewayRules();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initCustomizedApis</span><span class="hljs-params">()</span> </span>&#123;<br>        Set&lt;ApiDefinition&gt; definitions = <span class="hljs-keyword">new</span> HashSet&lt;&gt;();<br>        ApiDefinition api1 = <span class="hljs-keyword">new</span> ApiDefinition(<span class="hljs-string">"consumer"</span>)<br>                .setPredicateItems(<span class="hljs-keyword">new</span> HashSet&lt;ApiPredicateItem&gt;() &#123;&#123;<br><br>                    add(<span class="hljs-keyword">new</span> ApiPathPredicateItem().setPattern(<span class="hljs-string">"/consumer/**"</span>)<br>                            .setMatchStrategy(SentinelGatewayConstants.URL_MATCH_STRATEGY_PREFIX));<br>                &#125;&#125;);<br>        ApiDefinition api2 = <span class="hljs-keyword">new</span> ApiDefinition(<span class="hljs-string">"provider"</span>)<br>                .setPredicateItems(<span class="hljs-keyword">new</span> HashSet&lt;ApiPredicateItem&gt;() &#123;&#123;<br>                    add(<span class="hljs-keyword">new</span> ApiPathPredicateItem().setPattern(<span class="hljs-string">"/provider/**"</span>)<br>                            .setMatchStrategy(SentinelGatewayConstants.URL_MATCH_STRATEGY_PREFIX));<br>                &#125;&#125;);<br>        definitions.add(api1);<br>        definitions.add(api2);<br>        GatewayApiDefinitionManager.loadApiDefinitions(definitions);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initGatewayRules</span><span class="hljs-params">()</span> </span>&#123;<br>        Set&lt;GatewayFlowRule&gt; rules = <span class="hljs-keyword">new</span> HashSet&lt;&gt;();<br>        rules.add(<span class="hljs-keyword">new</span> GatewayFlowRule(<span class="hljs-string">"consumer"</span>)<br>                .setCount(<span class="hljs-number">10</span>)<br>                .setIntervalSec(<span class="hljs-number">1</span>)<br>        );<br>        rules.add(<span class="hljs-keyword">new</span> GatewayFlowRule(<span class="hljs-string">"consumer"</span>)<br>                .setCount(<span class="hljs-number">2</span>)<br>                .setIntervalSec(<span class="hljs-number">2</span>)<br>                .setBurst(<span class="hljs-number">2</span>)<br>                .setParamItem(<span class="hljs-keyword">new</span> GatewayParamFlowItem()<br>                        .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_CLIENT_IP)<br>                )<br>        );<br>        rules.add(<span class="hljs-keyword">new</span> GatewayFlowRule(<span class="hljs-string">"provider"</span>)<br>                .setCount(<span class="hljs-number">10</span>)<br>                .setIntervalSec(<span class="hljs-number">1</span>)<br>                .setControlBehavior(RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER)<br>                .setMaxQueueingTimeoutMs(<span class="hljs-number">600</span>)<br>                .setParamItem(<span class="hljs-keyword">new</span> GatewayParamFlowItem()<br>                        .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_HEADER)<br>                        .setFieldName(<span class="hljs-string">"X-Sentinel-Flag"</span>)<br>                )<br>        );<br>        rules.add(<span class="hljs-keyword">new</span> GatewayFlowRule(<span class="hljs-string">"provider"</span>)<br>                .setCount(<span class="hljs-number">1</span>)<br>                .setIntervalSec(<span class="hljs-number">1</span>)<br>                .setParamItem(<span class="hljs-keyword">new</span> GatewayParamFlowItem()<br>                        .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_URL_PARAM)<br>                        .setFieldName(<span class="hljs-string">"pa"</span>)<br>                )<br>        );<br>        rules.add(<span class="hljs-keyword">new</span> GatewayFlowRule(<span class="hljs-string">"provider"</span>)<br>                .setCount(<span class="hljs-number">2</span>)<br>                .setIntervalSec(<span class="hljs-number">30</span>)<br>                .setParamItem(<span class="hljs-keyword">new</span> GatewayParamFlowItem()<br>                        .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_URL_PARAM)<br>                        .setFieldName(<span class="hljs-string">"type"</span>)<br>                        .setPattern(<span class="hljs-string">"warn"</span>)<br>                        .setMatchStrategy(SentinelGatewayConstants.PARAM_MATCH_STRATEGY_CONTAINS)<br>                )<br>        );<br><br>        rules.add(<span class="hljs-keyword">new</span> GatewayFlowRule(<span class="hljs-string">"provider"</span>)<br>                .setResourceMode(SentinelGatewayConstants.RESOURCE_MODE_CUSTOM_API_NAME)<br>                .setCount(<span class="hljs-number">5</span>)<br>                .setIntervalSec(<span class="hljs-number">1</span>)<br>                .setParamItem(<span class="hljs-keyword">new</span> GatewayParamFlowItem()<br>                        .setParseStrategy(SentinelGatewayConstants.PARAM_PARSE_STRATEGY_URL_PARAM)<br>                        .setFieldName(<span class="hljs-string">"pn"</span>)<br>                )<br>        );<br>        GatewayRuleManager.loadRules(rules);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h3><p>通过上面的配置gateway已经成功整合了Sentinel，然后我们可以通过请求接口：<a href="http://127.0.0.1:15010/consumer/nacos" target="_blank" rel="noopener">http://127.0.0.1:15010/consumer/nacos</a>  </p>
+<p>正常的结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">&#123;<br><span class="hljs-string">"code"</span>: <span class="hljs-number">401</span>,<br><span class="hljs-string">"message"</span>: <span class="hljs-string">"未登录"</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里返回的结果是因为之前gateway做了登录权限的校验，可以通过auth服务登录之后，将header中的token值作为请求的header中的token，就可以得到正确的返回值，对于当前的测试这个都是无关紧要的，可以通过查看前面的教程知道前因后果。</p>
+<p>通过修改限流：</p>
+<p><img   class="lazyload" data-original="https://cdn.jsdelivr.net/gh/WinterChenS/imgrpo/blog/20210805095453.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<p>多次点击可以得到异常信息:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Blocked by Sentinel: FlowException<br></code></pre></td></tr></table></figure>
+
+<p>这样就可以通过网关层进行统一的接口流量控制，当然Sentinel的作用不止于此，大家可以通过其他的功能掌握对于接口的控制。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>通过接口的限流和熔断可以让微服务中的模块可以更加的稳定，当大量流量来袭的时候也丝毫不慌。</p>
+<p>除了一些比较极端的比如秒杀抢购抢券等功能，在流量比较大的应用中也是广泛的使用。</p>
+<h2 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h2><p><a href="https://github.com/WinterChenS/spring-cloud-hoxton-study" target="_blank" rel="noopener">https://github.com/WinterChenS/spring-cloud-hoxton-study</a></p>
+<p>参考文献</p>
+<p><a href="https://sentinelguard.io/zh-cn/docs/introduction.html" target="_blank" rel="noopener">introduction</a></p>
+<p><a href="https://forezp.blog.csdn.net/article/details/115632888" target="_blank" rel="noopener">SpringCloud 2020版本教程3：使用sentinel作为熔断器_方志朋的专栏-CSDN博客</a></p>
+
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>winter chen</li>
+    <li><strong>本文链接：</strong><a href="https://blog.winterchen.com/2021/08/05/2021-08-05-spring-cloud-hoxton-6-sentinel/index.html" title="https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2021&#x2F;08&#x2F;05&#x2F;2021-08-05-spring-cloud-hoxton-6-sentinel&#x2F;index.html">https:&#x2F;&#x2F;blog.winterchen.com&#x2F;2021&#x2F;08&#x2F;05&#x2F;2021-08-05-spring-cloud-hoxton-6-sentinel&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hoxton/" rel="tag">Hoxton</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sentinel/" rel="tag">Sentinel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a href="/2021/08/06/2021-08-06-spring-cloud-hoxton-7-sleuth/"><i class="iconfont iconleft"></i>SpringCloud系列教程(七)之使用Spring Cloud Sleuth+Zipkin实现链路追踪</a>
+    <a href="/2021/08/04/2021-08-04-spring-cloud-hoxton-5-swagger/">SpringCloud系列教程(五)之SpringCloud Gateway 网关聚合开发文档 swagger knife4j 和登录权限统一验证<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+    <div class="btn" id="comments-btn">查看评论</div>
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk" class="gitalk"></div>
+<script defer src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  window.onload = function () {
+    var gitalk = new Gitalk({
+      clientID: '77f2adc33e0112d086d7',
+      clientSecret: 'e926aa3a621556609b2c2b76d89320fa524e23cd',
+      id: window.location.pathname,
+      repo: 'WinterChenS.github.io',
+      owner: 'WinterChenS',
+      admin: 'WinterChenS'
+    });
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        gitalk.render('gitalk');
+      });
+    } else {
+      gitalk.render('gitalk');
+    }
+  }
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前情概要"><span class="toc-text">前情概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本文概览"><span class="toc-text">本文概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是熔断器"><span class="toc-text">什么是熔断器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是sentinel"><span class="toc-text">什么是sentinel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sentinel-功能和设计理念"><span class="toc-text">Sentinel 功能和设计理念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#熔断降级"><span class="toc-text">熔断降级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sentinel-是如何工作的"><span class="toc-text">Sentinel 是如何工作的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Cloud-整合-Sentinel"><span class="toc-text">Spring Cloud 整合 Sentinel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载安装sentinel-dashboard"><span class="toc-text">下载安装sentinel dashboard</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#改造工程consumer"><span class="toc-text">改造工程consumer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring-Cloud-Gateway使用Sentinel"><span class="toc-text">Spring Cloud Gateway使用Sentinel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试-1"><span class="toc-text">测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码地址"><span class="toc-text">源码地址</span></a></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="https://github.com/winterchens "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:i@winterchen.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Copyright 2017 | - <a target="_blank" href="https://github.com/Winterchens">winterchen</a> | <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">浙ICP备17056942号</a>  </p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+    <div class="search">
+  <div class="search-container">
+    <div class="search-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <div class="search-input-wrapper">
+      <i class="search-input-icon iconfont iconsearch"></i>
+      <input class="search-input" type="search" id="search-input" placeholder="Search..." autofocus autocomplete="off"
+        autocorrect="off" autocapitalize="off">
+    </div>
+    <div class="search-output" id="search-output"></div>
+  </div>
+</div>
+  
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <script>
+    window.ga = window.ga || function () {
+      (ga.q = ga.q || []).push(arguments)
+    };
+    ga.l = +new Date;
+    ga('create', 'UA-155319408-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script defer src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script>
+    var _mtac = {};
+    (function () {
+      var mta = document.createElement("script");
+      mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "500722607");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+
+
+
+</html>
